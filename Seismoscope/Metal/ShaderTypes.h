@@ -24,4 +24,13 @@ struct TimeMarkerVertex {
     simd_float2 texCoord;   // for label texture sampling
 };
 
+// Used in Pass 5: event annotation leader lines and labels.
+struct AnnotationVertex {
+    simd_float2 position;    // clip-space [-1, 1]
+    simd_float2 texCoord;    // [0,1] for labels; (0,0) for leader lines
+    simd_float4 tintColor;   // event tint (warm red or gray)
+    float        opacity;    // fade-in 0→1 over 30 frames
+    float        padding[3]; // pad to 48 bytes
+};
+
 #endif

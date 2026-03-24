@@ -23,6 +23,13 @@
 		B3FEB4266F6774EE93233E97 /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F3323CAAA78982A002045A7 /* Metal.framework */; };
 		F0E7E2CD91624D0577F91523 /* TextLabelCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A35DBBEA6D85B398D418047 /* TextLabelCache.swift */; };
 		F183C5A0185E616AA41EF935 /* MetalRibbonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A552BCB4A4BD0D0B6229E5D /* MetalRibbonView.swift */; };
+		9C10B8CDAE0B442FA3EACB80 /* SeismicEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94D6C83468534FF7A064AB37 /* SeismicEvent.swift */; };
+		828769E23A96442D98E2BE01 /* RegionPreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = A60F163C8FD54C38BCAED4C7 /* RegionPreset.swift */; };
+		9979FC32707540B6B3A757EE /* USGSModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C46541C560349C3AC2D7C9F /* USGSModels.swift */; };
+		B89EA539E1344394BDB8A8E3 /* USGSClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20BBF22CFF604578865033EA /* USGSClient.swift */; };
+		70006385AE5F45B48A703C7C /* USGSCorrelator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA688141FF3A45268E3F2D2E /* USGSCorrelator.swift */; };
+		64475474308C443FB90A978B /* EventDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DC35BE7133A4F93AAB77C94 /* EventDetailView.swift */; };
+		2353944275404A6198DC597E /* USGSCorrelatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7397D5EC9EC74A4B9DD7B2FB /* USGSCorrelatorTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,6 +63,13 @@
 		DF79CCDD604E7973C1100EA7 /* RibbonRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RibbonRenderer.swift; sourceTree = "<group>"; };
 		FC600610AF749C94E7E2B83B /* ShaderTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShaderTypes.h; sourceTree = "<group>"; };
 		FC94003FBAAEF9A82D93A25B /* RibbonContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RibbonContainerView.swift; sourceTree = "<group>"; };
+		94D6C83468534FF7A064AB37 /* SeismicEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeismicEvent.swift; sourceTree = "<group>"; };
+		A60F163C8FD54C38BCAED4C7 /* RegionPreset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegionPreset.swift; sourceTree = "<group>"; };
+		6C46541C560349C3AC2D7C9F /* USGSModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = USGSModels.swift; sourceTree = "<group>"; };
+		20BBF22CFF604578865033EA /* USGSClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = USGSClient.swift; sourceTree = "<group>"; };
+		BA688141FF3A45268E3F2D2E /* USGSCorrelator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = USGSCorrelator.swift; sourceTree = "<group>"; };
+		1DC35BE7133A4F93AAB77C94 /* EventDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDetailView.swift; sourceTree = "<group>"; };
+		7397D5EC9EC74A4B9DD7B2FB /* USGSCorrelatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = USGSCorrelatorTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,6 +141,7 @@
 				F0DB495D60C0C68D621DF3DA /* Models */,
 				C8081323AB49D1BCC5B7DF1F /* Resources */,
 				5211DF58D8FCD59482D6A400 /* Support */,
+				189D588AD65F4FA9BFC43460 /* USGS */,
 				CB139ECB60D746C4745A5788 /* Views */,
 			);
 			path = Seismoscope;
@@ -145,6 +160,7 @@
 			isa = PBXGroup;
 			children = (
 				CC556C16C29A2F9765514189 /* SeismoscopeTests.swift */,
+				7397D5EC9EC74A4B9DD7B2FB /* USGSCorrelatorTests.swift */,
 			);
 			path = SeismoscopeTests;
 			sourceTree = "<group>";
@@ -174,8 +190,19 @@
 			children = (
 				FC94003FBAAEF9A82D93A25B /* RibbonContainerView.swift */,
 				88C78C52DEBB1049F60B1083 /* StatusBarView.swift */,
+				1DC35BE7133A4F93AAB77C94 /* EventDetailView.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		189D588AD65F4FA9BFC43460 /* USGS */ = {
+			isa = PBXGroup;
+			children = (
+				6C46541C560349C3AC2D7C9F /* USGSModels.swift */,
+				20BBF22CFF604578865033EA /* USGSClient.swift */,
+				BA688141FF3A45268E3F2D2E /* USGSCorrelator.swift */,
+			);
+			path = USGS;
 			sourceTree = "<group>";
 		};
 		D6D2D6AC3C1D9B2752B508F0 /* Packages */ = {
@@ -190,6 +217,8 @@
 			isa = PBXGroup;
 			children = (
 				DEBFFFD1D6B70F6E115EFEB1 /* RibbonState.swift */,
+				94D6C83468534FF7A064AB37 /* SeismicEvent.swift */,
+				A60F163C8FD54C38BCAED4C7 /* RegionPreset.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -274,6 +303,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				54FE851877438176CF7E86A8 /* SeismoscopeTests.swift in Sources */,
+				2353944275404A6198DC597E /* USGSCorrelatorTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -282,7 +312,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				6E09BB222B8DDA0404E51E62 /* AccelerometerPipeline.swift in Sources */,
+				9C10B8CDAE0B442FA3EACB80 /* SeismicEvent.swift in Sources */,
+				828769E23A96442D98E2BE01 /* RegionPreset.swift in Sources */,
 				9CED016C751659BA8016C6EE /* EventCoordinator.swift in Sources */,
+				64475474308C443FB90A978B /* EventDetailView.swift in Sources */,
 				F183C5A0185E616AA41EF935 /* MetalRibbonView.swift in Sources */,
 				7F0377A745261B2F4BC26741 /* RibbonContainerView.swift in Sources */,
 				17318FC907241B4E1A800967 /* RibbonRenderer.swift in Sources */,
@@ -293,6 +326,9 @@
 				25972A2C3E2F3DD5C5266D41 /* SyntheticDataSource.swift in Sources */,
 				F0E7E2CD91624D0577F91523 /* TextLabelCache.swift in Sources */,
 				7AD315E33C8C54883EAB35A0 /* TextureGenerator.swift in Sources */,
+				9979FC32707540B6B3A757EE /* USGSModels.swift in Sources */,
+				B89EA539E1344394BDB8A8E3 /* USGSClient.swift in Sources */,
+				70006385AE5F45B48A703C7C /* USGSCorrelator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

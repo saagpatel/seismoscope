@@ -1,4 +1,5 @@
 import CoreMotion
+import SwiftData
 import SwiftUI
 
 @main
@@ -6,15 +7,26 @@ struct SeismoscopeApp: App {
     @State private var ribbonState = RibbonState()
     @State private var coordinator: EventCoordinator?
     @State private var syntheticSource: SyntheticDataSource?
+    @State private var selectedEventId: UUID?
     @Environment(\.scenePhase) private var scenePhase
+
+    private let modelContainer: ModelContainer = {
+        do {
+            return try ModelContainer(for: SeismicEvent.self)
+        } catch {
+            fatalError("Failed to create ModelContainer: \(error)")
+        }
+    }()
 
     private var isUsingLivePipeline: Bool { coordinator != nil }
 
     var body: some Scene {
         WindowGroup {
             ZStack {
-                RibbonContainerView(ribbonState: ribbonState)
-                    .ignoresSafeArea()
+                RibbonContainerView(ribbonState: ribbonState) { eventId in
+                    selectedEventId = eventId
+                }
+                .ignoresSafeArea()
 
                 StatusBarView(ribbonState: ribbonState)
 
@@ -36,7 +48,12 @@ struct SeismoscopeApp: App {
                     break
                 }
             }
+            .sheet(item: $selectedEventId) { eventId in
+                EventDetailView(eventId: eventId)
+                    .modelContainer(modelContainer)
+            }
         }
+        .modelContainer(modelContainer)
     }
 
     private func startPipeline() {
@@ -44,7 +61,11 @@ struct SeismoscopeApp: App {
 
         if CMMotionManager().isAccelerometerAvailable {
             let pipeline = AccelerometerPipeline()
-            let coord = EventCoordinator(pipeline: pipeline, ribbonState: ribbonState)
+            let coord = EventCoordinator(
+                pipeline: pipeline,
+                ribbonState: ribbonState,
+                modelContext: modelContainer.mainContext
+            )
             pipeline.start()
             coord.start()
             coordinator = coord

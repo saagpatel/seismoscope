@@ -10,6 +10,8 @@ final class RibbonRenderer: NSObject {
     private let blurPipeline: MTLComputePipelineState
     private let compositePipeline: MTLRenderPipelineState
     private let labelPipeline: MTLRenderPipelineState
+    private let annotationLinePipeline: MTLRenderPipelineState
+    private let annotationLabelPipeline: MTLRenderPipelineState
     private let parchmentTexture: MTLTexture
 
     private var ribbonTexture: MTLTexture?
@@ -18,9 +20,15 @@ final class RibbonRenderer: NSObject {
 
     private var uniformBuffers: [MTLBuffer]
     private var traceVertexBuffers: [MTLBuffer]
+    private var annotationVertexBuffers: [MTLBuffer]
     private let bufferSemaphore = DispatchSemaphore(value: 3)
     private var bufferIndex = 0
     private let traceBufferCapacity = 8000
+    // Max 20 events × 12 vertices (6 line + 6 label) per event
+    private let annotationBufferCapacity = 240
+
+    // Tracks frames since each event first appeared — drives 30-frame fade-in
+    private var eventFrameCounts: [UUID: Int] = [:]
 
     private var scrollOffset: Float = 0
     private var previousTime: CFTimeInterval = 0
@@ -85,6 +93,30 @@ final class RibbonRenderer: NSObject {
         labelDesc.colorAttachments[0].destinationAlphaBlendFactor = .oneMinusSourceAlpha
         self.labelPipeline = try! device.makeRenderPipelineState(descriptor: labelDesc)
 
+        // Annotation line pipeline (alpha blending, no texture)
+        let annLineDesc = MTLRenderPipelineDescriptor()
+        annLineDesc.vertexFunction = library.makeFunction(name: "annotationLineVertex")
+        annLineDesc.fragmentFunction = library.makeFunction(name: "annotationLineFragment")
+        annLineDesc.colorAttachments[0].pixelFormat = .bgra8Unorm
+        annLineDesc.colorAttachments[0].isBlendingEnabled = true
+        annLineDesc.colorAttachments[0].sourceRGBBlendFactor = .sourceAlpha
+        annLineDesc.colorAttachments[0].destinationRGBBlendFactor = .oneMinusSourceAlpha
+        annLineDesc.colorAttachments[0].sourceAlphaBlendFactor = .one
+        annLineDesc.colorAttachments[0].destinationAlphaBlendFactor = .oneMinusSourceAlpha
+        self.annotationLinePipeline = try! device.makeRenderPipelineState(descriptor: annLineDesc)
+
+        // Annotation label pipeline (alpha blending, with texture)
+        let annLabelDesc = MTLRenderPipelineDescriptor()
+        annLabelDesc.vertexFunction = library.makeFunction(name: "annotationLabelVertex")
+        annLabelDesc.fragmentFunction = library.makeFunction(name: "annotationLabelFragment")
+        annLabelDesc.colorAttachments[0].pixelFormat = .bgra8Unorm
+        annLabelDesc.colorAttachments[0].isBlendingEnabled = true
+        annLabelDesc.colorAttachments[0].sourceRGBBlendFactor = .sourceAlpha
+        annLabelDesc.colorAttachments[0].destinationRGBBlendFactor = .oneMinusSourceAlpha
+        annLabelDesc.colorAttachments[0].sourceAlphaBlendFactor = .one
+        annLabelDesc.colorAttachments[0].destinationAlphaBlendFactor = .oneMinusSourceAlpha
+        self.annotationLabelPipeline = try! device.makeRenderPipelineState(descriptor: annLabelDesc)
+
         // Generate parchment texture once
         self.parchmentTexture = TextureGenerator.generateParchmentTexture(device: device)
 
@@ -98,6 +130,12 @@ final class RibbonRenderer: NSObject {
         let vertexSize = traceBufferCapacity * MemoryLayout<TraceVertex>.stride
         self.traceVertexBuffers = (0..<3).map { _ in
             device.makeBuffer(length: vertexSize, options: .storageModeShared)!
+        }
+
+        // Triple-buffered annotation vertex buffers
+        let annotationSize = 240 * MemoryLayout<AnnotationVertex>.stride
+        self.annotationVertexBuffers = (0..<3).map { _ in
+            device.makeBuffer(length: annotationSize, options: .storageModeShared)!
         }
 
         super.init()
@@ -178,6 +216,141 @@ final class RibbonRenderer: NSObject {
         let end = state.samples.count
         guard startIndex < end else { return false }
         return state.samples[startIndex..<end].contains { abs($0) > 0.005 }
+    }
+
+    /// Builds annotation vertices for all active events. Returns (lineCount, labelCount per event).
+    /// Writes into the current annotationVertexBuffer.
+    /// Returns array of (lineVertexCount, labelVertexCount, labelTexture, eventId) tuples per event.
+    private func buildAnnotationBatches() -> [(lineStart: Int, labelStart: Int, labelTex: MTLTexture?, tint: SIMD4<Float>, opacity: Float)] {
+        guard let state = ribbonState else { return [] }
+        let samples = state.samples
+        guard !samples.isEmpty else { return [] }
+
+        let subPixelOffset = fmod(scrollOffset, 1.0)
+        let buffer = annotationVertexBuffers[bufferIndex]
+        let verts = buffer.contents().bindMemory(to: AnnotationVertex.self, capacity: annotationBufferCapacity)
+
+        let ndcScaleX: Float = 2.0 / viewportSize.x
+        let ndcScaleY: Float = 2.0 / viewportSize.y
+        let traceCenterY: Float = 0.0       // NDC y=0 is the trace midline
+        let leaderHeightNDC: Float = 24.0 * ndcScaleY
+        let lineHalfWidthNDC: Float = 0.5 * ndcScaleX
+        let zeroPad: (Float, Float, Float) = (0, 0, 0)
+
+        var writeIndex = 0
+        var batches: [(lineStart: Int, labelStart: Int, labelTex: MTLTexture?, tint: SIMD4<Float>, opacity: Float)] = []
+
+        // Update frame counts; remove stale entries
+        let activeIds = Set(state.activeEvents.map { $0.id })
+        eventFrameCounts = eventFrameCounts.filter { activeIds.contains($0.key) }
+
+        for event in state.activeEvents {
+            // Compute pixel X of this event's onset sample
+            let pixelX = viewportSize.x - Float(samples.count - 1 - event.sampleIndex) - subPixelOffset
+            guard pixelX >= -10, pixelX <= viewportSize.x + 10 else { continue }
+            guard writeIndex + 12 <= annotationBufferCapacity else { break }
+
+            // Fade-in opacity
+            let frame = eventFrameCounts[event.id, default: 0]
+            eventFrameCounts[event.id] = frame + 1
+            let opacity = min(Float(frame + 1) / 30.0, 1.0)
+
+            let ndcX = pixelX * ndcScaleX - 1.0
+            let lineTop = traceCenterY + leaderHeightNDC
+            let tint = SIMD4<Float>(event.tintColor.x, event.tintColor.y, event.tintColor.z, 1.0)
+
+            // 6 vertices for the leader line quad (2 triangles)
+            let lineStart = writeIndex
+            let linePositions: [(Float, Float)] = [
+                (ndcX - lineHalfWidthNDC, traceCenterY),
+                (ndcX + lineHalfWidthNDC, traceCenterY),
+                (ndcX - lineHalfWidthNDC, lineTop),
+                (ndcX + lineHalfWidthNDC, traceCenterY),
+                (ndcX + lineHalfWidthNDC, lineTop),
+                (ndcX - lineHalfWidthNDC, lineTop),
+            ]
+            for (px, py) in linePositions {
+                verts[writeIndex] = AnnotationVertex(
+                    position: SIMD2<Float>(px, py),
+                    texCoord: .zero,
+                    tintColor: tint,
+                    opacity: opacity,
+                    padding: zeroPad
+                )
+                writeIndex += 1
+            }
+
+            // 6 vertices for the label quad (if texture available)
+            let labelStart = writeIndex
+            let labelTex = textLabelCache?.texture(for: event.label)
+            guard let labelTex else {
+                batches.append((lineStart: lineStart, labelStart: labelStart, labelTex: nil, tint: tint, opacity: opacity))
+                continue
+            }
+
+            let labelW = Float(labelTex.width) * ndcScaleX
+            let labelH = Float(labelTex.height) * ndcScaleY
+            let labelBottom = lineTop + 4.0 * ndcScaleY
+            let labelTop = labelBottom + labelH
+            let labelLeft = ndcX - labelW / 2.0
+            let labelRight = ndcX + labelW / 2.0
+
+            let labelPositions: [(Float, Float, Float, Float)] = [
+                (labelLeft,  labelBottom, 0, 1),
+                (labelRight, labelBottom, 1, 1),
+                (labelLeft,  labelTop,    0, 0),
+                (labelRight, labelBottom, 1, 1),
+                (labelRight, labelTop,    1, 0),
+                (labelLeft,  labelTop,    0, 0),
+            ]
+            for (px, py, tx, ty) in labelPositions {
+                verts[writeIndex] = AnnotationVertex(
+                    position: SIMD2<Float>(px, py),
+                    texCoord: SIMD2<Float>(tx, ty),
+                    tintColor: tint,
+                    opacity: opacity,
+                    padding: zeroPad
+                )
+                writeIndex += 1
+            }
+
+            batches.append((lineStart: lineStart, labelStart: labelStart, labelTex: labelTex, tint: tint, opacity: opacity))
+        }
+
+        return batches
+    }
+
+    private func renderAnnotations(commandBuffer: MTLCommandBuffer, drawable: CAMetalDrawable) {
+        guard let state = ribbonState, !state.activeEvents.isEmpty else { return }
+
+        let batches = buildAnnotationBatches()
+        guard !batches.isEmpty else { return }
+
+        let annotationPassDesc = MTLRenderPassDescriptor()
+        annotationPassDesc.colorAttachments[0].texture = drawable.texture
+        annotationPassDesc.colorAttachments[0].loadAction = .load   // composite on top
+        annotationPassDesc.colorAttachments[0].storeAction = .store
+
+        guard let encoder = commandBuffer.makeRenderCommandEncoder(descriptor: annotationPassDesc) else { return }
+
+        let annotationBuffer = annotationVertexBuffers[bufferIndex]
+
+        for batch in batches {
+            // Draw leader line
+            encoder.setRenderPipelineState(annotationLinePipeline)
+            encoder.setVertexBuffer(annotationBuffer, offset: batch.lineStart * MemoryLayout<AnnotationVertex>.stride, index: 0)
+            encoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: 6)
+
+            // Draw label (only when texture is available)
+            if let labelTex = batch.labelTex {
+                encoder.setRenderPipelineState(annotationLabelPipeline)
+                encoder.setVertexBuffer(annotationBuffer, offset: batch.labelStart * MemoryLayout<AnnotationVertex>.stride, index: 0)
+                encoder.setFragmentTexture(labelTex, index: 0)
+                encoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: 6)
+            }
+        }
+
+        encoder.endEncoding()
     }
 
     private func rebuildOffscreenTextures(width: Int, height: Int) {
@@ -312,6 +485,9 @@ extension RibbonRenderer: MTKViewDelegate {
 
             encoder.endEncoding()
         }
+
+        // Pass 5: Event annotations (leader lines + labels) composited onto drawable
+        renderAnnotations(commandBuffer: commandBuffer, drawable: drawable)
 
         commandBuffer.present(drawable)
         commandBuffer.commit()

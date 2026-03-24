@@ -161,3 +161,56 @@ fragment float4 labelFragment(
     float3 inkColor = float3(20.0 / 255.0, 15.0 / 255.0, 10.0 / 255.0);
     return float4(inkColor, texColor.a);
 }
+
+// MARK: - Pass 5: Event Annotation (leader lines)
+
+struct AnnotationLineVertexOut {
+    float4 position [[position]];
+    float4 tintColor;
+    float  opacity;
+};
+
+vertex AnnotationLineVertexOut annotationLineVertex(
+    const device AnnotationVertex* vertices [[buffer(0)]],
+    uint vid [[vertex_id]]
+) {
+    AnnotationLineVertexOut out;
+    out.position  = float4(vertices[vid].position, 0, 1);
+    out.tintColor = vertices[vid].tintColor;
+    out.opacity   = vertices[vid].opacity;
+    return out;
+}
+
+fragment float4 annotationLineFragment(AnnotationLineVertexOut in [[stage_in]]) {
+    return float4(in.tintColor.rgb, 0.55 * in.opacity);
+}
+
+// MARK: - Pass 5: Event Annotation (labels)
+
+struct AnnotationLabelVertexOut {
+    float4 position [[position]];
+    float2 texCoord;
+    float4 tintColor;
+    float  opacity;
+};
+
+vertex AnnotationLabelVertexOut annotationLabelVertex(
+    const device AnnotationVertex* vertices [[buffer(0)]],
+    uint vid [[vertex_id]]
+) {
+    AnnotationLabelVertexOut out;
+    out.position  = float4(vertices[vid].position, 0, 1);
+    out.texCoord  = vertices[vid].texCoord;
+    out.tintColor = vertices[vid].tintColor;
+    out.opacity   = vertices[vid].opacity;
+    return out;
+}
+
+fragment float4 annotationLabelFragment(
+    AnnotationLabelVertexOut in [[stage_in]],
+    texture2d<float> labelTex [[texture(0)]]
+) {
+    constexpr sampler s(filter::linear, address::clamp_to_edge);
+    float4 tex = labelTex.sample(s, in.texCoord);
+    return float4(in.tintColor.rgb, tex.a * in.opacity);
+}
