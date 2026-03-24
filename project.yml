@@ -1,0 +1,56 @@
+name: Seismoscope
+options:
+  bundleIdPrefix: com.seismoscope
+  deploymentTarget:
+    iOS: "17.0"
+  createIntermediateGroups: true
+  generateEmptyDirectories: true
+
+settings:
+  base:
+    SWIFT_VERSION: "6"
+    SWIFT_STRICT_CONCURRENCY: complete
+    IPHONEOS_DEPLOYMENT_TARGET: "17.0"
+    TARGETED_DEVICE_FAMILY: "1,2"
+
+packages:
+  SeismoscopeKit:
+    path: SeismoscopeKit
+
+targets:
+  Seismoscope:
+    type: application
+    platform: iOS
+    sources:
+      - path: Seismoscope
+    dependencies:
+      - package: SeismoscopeKit
+      - sdk: Metal.framework
+      - sdk: MetalKit.framework
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.seismoscope.app
+        GENERATE_INFOPLIST_FILE: true
+        INFOPLIST_KEY_UIApplicationSceneManifest_Generation: true
+        INFOPLIST_KEY_UILaunchScreen_Generation: true
+        INFOPLIST_KEY_NSMotionUsageDescription: "Seismoscope uses your iPhone's accelerometer to detect ground vibrations and display them as a seismogram."
+        INFOPLIST_KEY_UISupportedInterfaceOrientations: "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
+        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad: "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
+        SWIFT_OBJC_BRIDGING_HEADER: Seismoscope/Support/Seismoscope-Bridging-Header.h
+        HEADER_SEARCH_PATHS: "$(SRCROOT)/Seismoscope/Metal"
+        MTL_HEADER_SEARCH_PATHS: "$(SRCROOT)/Seismoscope/Metal"
+    scheme:
+      testTargets:
+        - SeismoscopeTests
+
+  SeismoscopeTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: SeismoscopeTests
+    dependencies:
+      - target: Seismoscope
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.seismoscope.tests
+        GENERATE_INFOPLIST_FILE: true

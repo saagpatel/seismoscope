@@ -1,0 +1,550 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		17318FC907241B4E1A800967 /* RibbonRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF79CCDD604E7973C1100EA7 /* RibbonRenderer.swift */; };
+		1807BCD3F2C2DEBD85A20B33 /* MetalKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 797827C2FCBBCDD28DCD96AB /* MetalKit.framework */; };
+		25972A2C3E2F3DD5C5266D41 /* SyntheticDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46E11FB51CF211513B24D12E /* SyntheticDataSource.swift */; };
+		54FE851877438176CF7E86A8 /* SeismoscopeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC556C16C29A2F9765514189 /* SeismoscopeTests.swift */; };
+		6269ABFE908ADC327C54D17C /* SeismoscopeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E8F32103D7B89A49FE577C /* SeismoscopeApp.swift */; };
+		76A2BBE3B4F3E0E15C0E59A1 /* SeismoscopeKit in Frameworks */ = {isa = PBXBuildFile; productRef = FB3E985C115470D2E0D9BFB9 /* SeismoscopeKit */; };
+		773FCE326035D60D3E69AF7A /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 0AD627BCFCB86AA917AAC35A /* Shaders.metal */; };
+		7AD315E33C8C54883EAB35A0 /* TextureGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44BF9F4688FA4B77B5B50477 /* TextureGenerator.swift */; };
+		7F0377A745261B2F4BC26741 /* RibbonContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC94003FBAAEF9A82D93A25B /* RibbonContainerView.swift */; };
+		AEC48B590F2F5607ECBCA433 /* RibbonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEBFFFD1D6B70F6E115EFEB1 /* RibbonState.swift */; };
+		B3FEB4266F6774EE93233E97 /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F3323CAAA78982A002045A7 /* Metal.framework */; };
+		F0E7E2CD91624D0577F91523 /* TextLabelCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A35DBBEA6D85B398D418047 /* TextLabelCache.swift */; };
+		F183C5A0185E616AA41EF935 /* MetalRibbonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A552BCB4A4BD0D0B6229E5D /* MetalRibbonView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		772AC89C2141F9A91B642226 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8C8A948817FD02F1682E0AE1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 62F9092358A28285E18A6C69;
+			remoteInfo = Seismoscope;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		0AD627BCFCB86AA917AAC35A /* Shaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
+		29273D90BF5C136CC92343D6 /* SeismoscopeKit */ = {isa = PBXFileReference; lastKnownFileType = folder; name = SeismoscopeKit; path = SeismoscopeKit; sourceTree = SOURCE_ROOT; };
+		44BF9F4688FA4B77B5B50477 /* TextureGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextureGenerator.swift; sourceTree = "<group>"; };
+		46E11FB51CF211513B24D12E /* SyntheticDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyntheticDataSource.swift; sourceTree = "<group>"; };
+		57E8F32103D7B89A49FE577C /* SeismoscopeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeismoscopeApp.swift; sourceTree = "<group>"; };
+		5A35DBBEA6D85B398D418047 /* TextLabelCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextLabelCache.swift; sourceTree = "<group>"; };
+		5B8C3E81129125DC5BEBEFD5 /* SeismoscopeTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = SeismoscopeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		797827C2FCBBCDD28DCD96AB /* MetalKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MetalKit.framework; path = System/Library/Frameworks/MetalKit.framework; sourceTree = SDKROOT; };
+		8F3323CAAA78982A002045A7 /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
+		9A552BCB4A4BD0D0B6229E5D /* MetalRibbonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalRibbonView.swift; sourceTree = "<group>"; };
+		AF96430BBE95505B36425201 /* Seismoscope.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Seismoscope.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		CC556C16C29A2F9765514189 /* SeismoscopeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeismoscopeTests.swift; sourceTree = "<group>"; };
+		D2863554DDD0ADB49BE315DC /* Seismoscope-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Seismoscope-Bridging-Header.h"; sourceTree = "<group>"; };
+		DEBFFFD1D6B70F6E115EFEB1 /* RibbonState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RibbonState.swift; sourceTree = "<group>"; };
+		DF79CCDD604E7973C1100EA7 /* RibbonRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RibbonRenderer.swift; sourceTree = "<group>"; };
+		FC600610AF749C94E7E2B83B /* ShaderTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShaderTypes.h; sourceTree = "<group>"; };
+		FC94003FBAAEF9A82D93A25B /* RibbonContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RibbonContainerView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		9D370E4C0EB8A82C5F13D448 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				76A2BBE3B4F3E0E15C0E59A1 /* SeismoscopeKit in Frameworks */,
+				B3FEB4266F6774EE93233E97 /* Metal.framework in Frameworks */,
+				1807BCD3F2C2DEBD85A20B33 /* MetalKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		18B62BF89E09A2A85C8BA61D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				8F3323CAAA78982A002045A7 /* Metal.framework */,
+				797827C2FCBBCDD28DCD96AB /* MetalKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		4793F1A7C1E0A25CF15A6F2D /* DSP */ = {
+			isa = PBXGroup;
+			children = (
+				46E11FB51CF211513B24D12E /* SyntheticDataSource.swift */,
+			);
+			path = DSP;
+			sourceTree = "<group>";
+		};
+		5211DF58D8FCD59482D6A400 /* Support */ = {
+			isa = PBXGroup;
+			children = (
+				D2863554DDD0ADB49BE315DC /* Seismoscope-Bridging-Header.h */,
+			);
+			path = Support;
+			sourceTree = "<group>";
+		};
+		6638A8937881E10FED2D856D /* App */ = {
+			isa = PBXGroup;
+			children = (
+				57E8F32103D7B89A49FE577C /* SeismoscopeApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		6D53CBA067AF88156A25289E = {
+			isa = PBXGroup;
+			children = (
+				D6D2D6AC3C1D9B2752B508F0 /* Packages */,
+				81C523443C1F9CE1C1E4B932 /* Seismoscope */,
+				B0240443C3CF0BCF688ADCCF /* SeismoscopeTests */,
+				18B62BF89E09A2A85C8BA61D /* Frameworks */,
+				874E2EF856CAF8739B42DB65 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		81C523443C1F9CE1C1E4B932 /* Seismoscope */ = {
+			isa = PBXGroup;
+			children = (
+				6638A8937881E10FED2D856D /* App */,
+				4793F1A7C1E0A25CF15A6F2D /* DSP */,
+				B88B17B3AFBF2446E1488FDC /* Metal */,
+				F0DB495D60C0C68D621DF3DA /* Models */,
+				C8081323AB49D1BCC5B7DF1F /* Resources */,
+				5211DF58D8FCD59482D6A400 /* Support */,
+				CB139ECB60D746C4745A5788 /* Views */,
+			);
+			path = Seismoscope;
+			sourceTree = "<group>";
+		};
+		874E2EF856CAF8739B42DB65 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				AF96430BBE95505B36425201 /* Seismoscope.app */,
+				5B8C3E81129125DC5BEBEFD5 /* SeismoscopeTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		B0240443C3CF0BCF688ADCCF /* SeismoscopeTests */ = {
+			isa = PBXGroup;
+			children = (
+				CC556C16C29A2F9765514189 /* SeismoscopeTests.swift */,
+			);
+			path = SeismoscopeTests;
+			sourceTree = "<group>";
+		};
+		B88B17B3AFBF2446E1488FDC /* Metal */ = {
+			isa = PBXGroup;
+			children = (
+				9A552BCB4A4BD0D0B6229E5D /* MetalRibbonView.swift */,
+				DF79CCDD604E7973C1100EA7 /* RibbonRenderer.swift */,
+				0AD627BCFCB86AA917AAC35A /* Shaders.metal */,
+				FC600610AF749C94E7E2B83B /* ShaderTypes.h */,
+				5A35DBBEA6D85B398D418047 /* TextLabelCache.swift */,
+				44BF9F4688FA4B77B5B50477 /* TextureGenerator.swift */,
+			);
+			path = Metal;
+			sourceTree = "<group>";
+		};
+		C8081323AB49D1BCC5B7DF1F /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		CB139ECB60D746C4745A5788 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				FC94003FBAAEF9A82D93A25B /* RibbonContainerView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		D6D2D6AC3C1D9B2752B508F0 /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				29273D90BF5C136CC92343D6 /* SeismoscopeKit */,
+			);
+			name = Packages;
+			sourceTree = "<group>";
+		};
+		F0DB495D60C0C68D621DF3DA /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				DEBFFFD1D6B70F6E115EFEB1 /* RibbonState.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		3F471A554AE1A22F2C52485C /* SeismoscopeTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4C4E4E40B4F3080D6B145BF4 /* Build configuration list for PBXNativeTarget "SeismoscopeTests" */;
+			buildPhases = (
+				7298EB7D0F02B55717949EAF /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				14C8BE3F0D3A6C590011911C /* PBXTargetDependency */,
+			);
+			name = SeismoscopeTests;
+			packageProductDependencies = (
+			);
+			productName = SeismoscopeTests;
+			productReference = 5B8C3E81129125DC5BEBEFD5 /* SeismoscopeTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		62F9092358A28285E18A6C69 /* Seismoscope */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 82E9D9C64F91D192D0E5DD5D /* Build configuration list for PBXNativeTarget "Seismoscope" */;
+			buildPhases = (
+				B352B42A9DBF4C3CFE805049 /* Sources */,
+				9D370E4C0EB8A82C5F13D448 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Seismoscope;
+			packageProductDependencies = (
+				FB3E985C115470D2E0D9BFB9 /* SeismoscopeKit */,
+			);
+			productName = Seismoscope;
+			productReference = AF96430BBE95505B36425201 /* Seismoscope.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		8C8A948817FD02F1682E0AE1 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+				};
+			};
+			buildConfigurationList = 36BCACC872D21000EE7A6BBC /* Build configuration list for PBXProject "Seismoscope" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 6D53CBA067AF88156A25289E;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				BEA5EAEC72004DD808F6A578 /* XCLocalSwiftPackageReference "SeismoscopeKit" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 874E2EF856CAF8739B42DB65 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				62F9092358A28285E18A6C69 /* Seismoscope */,
+				3F471A554AE1A22F2C52485C /* SeismoscopeTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		7298EB7D0F02B55717949EAF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				54FE851877438176CF7E86A8 /* SeismoscopeTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B352B42A9DBF4C3CFE805049 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F183C5A0185E616AA41EF935 /* MetalRibbonView.swift in Sources */,
+				7F0377A745261B2F4BC26741 /* RibbonContainerView.swift in Sources */,
+				17318FC907241B4E1A800967 /* RibbonRenderer.swift in Sources */,
+				AEC48B590F2F5607ECBCA433 /* RibbonState.swift in Sources */,
+				6269ABFE908ADC327C54D17C /* SeismoscopeApp.swift in Sources */,
+				773FCE326035D60D3E69AF7A /* Shaders.metal in Sources */,
+				25972A2C3E2F3DD5C5266D41 /* SyntheticDataSource.swift in Sources */,
+				F0E7E2CD91624D0577F91523 /* TextLabelCache.swift in Sources */,
+				7AD315E33C8C54883EAB35A0 /* TextureGenerator.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		14C8BE3F0D3A6C590011911C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 62F9092358A28285E18A6C69 /* Seismoscope */;
+			targetProxy = 772AC89C2141F9A91B642226 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		1AA721EBF6C091470D2E706D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		43CA5B6A098B3066917A7C32 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				GENERATE_INFOPLIST_FILE = YES;
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/Seismoscope/Metal";
+				INFOPLIST_KEY_NSMotionUsageDescription = "Seismoscope uses your iPhone's accelerometer to detect ground vibrations and display them as a seismogram.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MTL_HEADER_SEARCH_PATHS = "$(SRCROOT)/Seismoscope/Metal";
+				PRODUCT_BUNDLE_IDENTIFIER = com.seismoscope.app;
+				SDKROOT = iphoneos;
+				SWIFT_OBJC_BRIDGING_HEADER = "Seismoscope/Support/Seismoscope-Bridging-Header.h";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		4E8DF73CFC266A47327D9227 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.seismoscope.tests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Seismoscope.app/Seismoscope";
+			};
+			name = Release;
+		};
+		5D4A4F454FBC358F91F677EE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.seismoscope.tests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Seismoscope.app/Seismoscope";
+			};
+			name = Debug;
+		};
+		721A628B36E6FF981C60703C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		DE75DFD17F7407EA696A78D8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				GENERATE_INFOPLIST_FILE = YES;
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/Seismoscope/Metal";
+				INFOPLIST_KEY_NSMotionUsageDescription = "Seismoscope uses your iPhone's accelerometer to detect ground vibrations and display them as a seismogram.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MTL_HEADER_SEARCH_PATHS = "$(SRCROOT)/Seismoscope/Metal";
+				PRODUCT_BUNDLE_IDENTIFIER = com.seismoscope.app;
+				SDKROOT = iphoneos;
+				SWIFT_OBJC_BRIDGING_HEADER = "Seismoscope/Support/Seismoscope-Bridging-Header.h";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		36BCACC872D21000EE7A6BBC /* Build configuration list for PBXProject "Seismoscope" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1AA721EBF6C091470D2E706D /* Debug */,
+				721A628B36E6FF981C60703C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		4C4E4E40B4F3080D6B145BF4 /* Build configuration list for PBXNativeTarget "SeismoscopeTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5D4A4F454FBC358F91F677EE /* Debug */,
+				4E8DF73CFC266A47327D9227 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		82E9D9C64F91D192D0E5DD5D /* Build configuration list for PBXNativeTarget "Seismoscope" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				43CA5B6A098B3066917A7C32 /* Debug */,
+				DE75DFD17F7407EA696A78D8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		BEA5EAEC72004DD808F6A578 /* XCLocalSwiftPackageReference "SeismoscopeKit" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = SeismoscopeKit;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		FB3E985C115470D2E0D9BFB9 /* SeismoscopeKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SeismoscopeKit;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 8C8A948817FD02F1682E0AE1 /* Project object */;
+}
