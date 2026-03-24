@@ -1,5 +1,6 @@
 @preconcurrency import CoreMotion
 import Foundation
+import os
 import SeismoscopeKit
 
 /// Manages the CMMotionManager → filter chain → STA/LTA pipeline.
@@ -16,6 +17,10 @@ final class AccelerometerPipeline: @unchecked Sendable {
     private let sampleContinuation: AsyncStream<AccelerometerSample>.Continuation
     private let triggerContinuation: AsyncStream<TriggerEvent>.Continuation
     private let stabilityContinuation: AsyncStream<Bool>.Continuation
+
+    // Thread-safe mailbox for threshold updates from the main actor.
+    // The pipeline callback drains it at the top of each sample cycle.
+    private let pendingThreshold = OSAllocatedUnfairLock<Float?>(initialState: nil)
 
     init() {
         self.motionManager = CMMotionManager()
@@ -51,7 +56,23 @@ final class AccelerometerPipeline: @unchecked Sendable {
         stabilityContinuation.finish()
     }
 
+    /// Updates the STA/LTA trigger threshold without restarting the pipeline.
+    /// Safe to call from any thread; the update is applied before the next sample is processed.
+    func updateThreshold(_ threshold: Float) {
+        pendingThreshold.withLock { $0 = threshold }
+    }
+
+    /// Switches between full-power (100Hz) and low-power (50Hz) accelerometer sampling.
+    func setLowPowerMode(_ enabled: Bool) {
+        motionManager.accelerometerUpdateInterval = enabled ? 0.02 : 0.01
+    }
+
     private func processSample(_ data: CMAccelerometerData) {
+        // Apply any pending threshold update before processing
+        if let t = pendingThreshold.withLock({ val -> Float? in let v = val; val = nil; return v }) {
+            state.applyThreshold(t)
+        }
+
         let rawX = Float(data.acceleration.x)
         let rawY = Float(data.acceleration.y)
         let rawZ = Float(data.acceleration.z)
@@ -155,6 +176,10 @@ private final class PipelineState: @unchecked Sendable {
             lastStableState = isStable
             continuation.yield(isStable)
         }
+    }
+
+    func applyThreshold(_ threshold: Float) {
+        detector.updateThreshold(threshold)
     }
 
     private func dominantAxisFor(x: Float, y: Float, z: Float) -> String {

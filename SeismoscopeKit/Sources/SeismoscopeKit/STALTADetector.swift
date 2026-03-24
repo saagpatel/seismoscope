@@ -124,6 +124,13 @@ public struct STALTADetector: Sendable {
         return nil
     }
 
+    // MARK: - Public mutation
+
+    /// Update the trigger threshold mid-session without resetting filter state.
+    public mutating func updateThreshold(_ threshold: Float) {
+        config.threshold = threshold
+    }
+
     // MARK: - Public computed properties
 
     /// Returns the current STA/LTA ratio, or 0 during the LTA filling phase.

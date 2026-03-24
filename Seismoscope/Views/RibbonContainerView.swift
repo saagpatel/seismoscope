@@ -42,7 +42,7 @@ struct RibbonContainerView: UIViewRepresentable {
         // No SwiftUI-driven updates needed.
     }
 
-    final class Coordinator {
+    @MainActor final class Coordinator {
         var renderer: RibbonRenderer?
         var ribbonState: RibbonState?
         var onEventTapped: ((UUID) -> Void)?

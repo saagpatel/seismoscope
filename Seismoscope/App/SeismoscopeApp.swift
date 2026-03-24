@@ -2,12 +2,19 @@ import CoreMotion
 import SwiftData
 import SwiftUI
 
+/// Thin Identifiable wrapper so UUID can be used with sheet(item:).
+private struct SelectedEvent: Identifiable {
+    let id: UUID
+}
+
 @main
 struct SeismoscopeApp: App {
+    @State private var appState = AppState()
     @State private var ribbonState = RibbonState()
     @State private var coordinator: EventCoordinator?
     @State private var syntheticSource: SyntheticDataSource?
-    @State private var selectedEventId: UUID?
+    @State private var selectedEvent: SelectedEvent?
+    @State private var showSettings = false
     @Environment(\.scenePhase) private var scenePhase
 
     private let modelContainer: ModelContainer = {
@@ -24,11 +31,13 @@ struct SeismoscopeApp: App {
         WindowGroup {
             ZStack {
                 RibbonContainerView(ribbonState: ribbonState) { eventId in
-                    selectedEventId = eventId
+                    selectedEvent = SelectedEvent(id: eventId)
                 }
                 .ignoresSafeArea()
 
-                StatusBarView(ribbonState: ribbonState)
+                StatusBarView(ribbonState: ribbonState) {
+                    showSettings = true
+                }
 
                 #if DEBUG
                 if !isUsingLivePipeline {
@@ -48,9 +57,22 @@ struct SeismoscopeApp: App {
                     break
                 }
             }
-            .sheet(item: $selectedEventId) { eventId in
-                EventDetailView(eventId: eventId)
+            // Live-propagate settings changes to the running pipeline
+            .onChange(of: appState.staLtaThreshold) { _, threshold in
+                coordinator?.pipeline.updateThreshold(threshold)
+            }
+            .onChange(of: appState.region) { _, region in
+                coordinator?.updateRegion(region)
+            }
+            .onChange(of: appState.lowPowerMode) { _, enabled in
+                coordinator?.pipeline.setLowPowerMode(enabled)
+            }
+            .sheet(item: $selectedEvent) { selection in
+                EventDetailView(eventId: selection.id)
                     .modelContainer(modelContainer)
+            }
+            .sheet(isPresented: $showSettings) {
+                SettingsView(appState: appState)
             }
         }
         .modelContainer(modelContainer)
@@ -61,10 +83,15 @@ struct SeismoscopeApp: App {
 
         if CMMotionManager().isAccelerometerAvailable {
             let pipeline = AccelerometerPipeline()
+            // Apply current settings before starting
+            pipeline.updateThreshold(appState.staLtaThreshold)
+            pipeline.setLowPowerMode(appState.lowPowerMode)
+
             let coord = EventCoordinator(
                 pipeline: pipeline,
                 ribbonState: ribbonState,
-                modelContext: modelContainer.mainContext
+                modelContext: modelContainer.mainContext,
+                region: appState.region
             )
             pipeline.start()
             coord.start()

@@ -8,11 +8,11 @@ import simd
 /// On trigger: persists a SeismicEvent to SwiftData, fires async USGS correlation.
 @MainActor
 final class EventCoordinator {
-    private let pipeline: AccelerometerPipeline
+    let pipeline: AccelerometerPipeline
     private let ribbonState: RibbonState
     private let modelContext: ModelContext
     private let usgsClient: any USGSClientProtocol
-    private let region: RegionPreset
+    private var region: RegionPreset
 
     private var sampleTask: Task<Void, Never>?
     private var triggerTask: Task<Void, Never>?
@@ -63,6 +63,11 @@ final class EventCoordinator {
         triggerTask?.cancel()
         stabilityTask?.cancel()
         pipeline.stop()
+    }
+
+    /// Updates the region used for future USGS correlation queries.
+    func updateRegion(_ newRegion: RegionPreset) {
+        region = newRegion
     }
 
     // MARK: - Trigger Handling
