@@ -23,6 +23,8 @@ targets:
     platform: iOS
     sources:
       - path: Seismoscope
+    resources:
+      - path: Seismoscope/Resources/PrivacyInfo.xcprivacy
     dependencies:
       - package: SeismoscopeKit
       - sdk: Metal.framework
@@ -30,6 +32,7 @@ targets:
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.seismoscope.app
+        DEVELOPMENT_TEAM: 3TGZFKFNA4
         GENERATE_INFOPLIST_FILE: true
         INFOPLIST_KEY_UIApplicationSceneManifest_Generation: true
         INFOPLIST_KEY_UILaunchScreen_Generation: true

@@ -7,34 +7,35 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0316063F62E41C6B94A143CD /* SeismicEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BD71D97B00D32453DDFAEA /* SeismicEvent.swift */; };
+		1213194489225F9621AECB3D /* EventDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38C3B5725FAC84B58383B8B5 /* EventDetailView.swift */; };
 		17318FC907241B4E1A800967 /* RibbonRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF79CCDD604E7973C1100EA7 /* RibbonRenderer.swift */; };
 		1807BCD3F2C2DEBD85A20B33 /* MetalKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 797827C2FCBBCDD28DCD96AB /* MetalKit.framework */; };
 		25972A2C3E2F3DD5C5266D41 /* SyntheticDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46E11FB51CF211513B24D12E /* SyntheticDataSource.swift */; };
+		33A338D3DBBA555319DEEFA7 /* RegionPreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 988197E29C5D75DE6FCC0101 /* RegionPreset.swift */; };
 		54FE851877438176CF7E86A8 /* SeismoscopeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC556C16C29A2F9765514189 /* SeismoscopeTests.swift */; };
 		6269ABFE908ADC327C54D17C /* SeismoscopeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E8F32103D7B89A49FE577C /* SeismoscopeApp.swift */; };
+		647CDDAB995162F2A1DE4C0C /* USGSCorrelator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4FD10E3DEC72F25279130A4 /* USGSCorrelator.swift */; };
 		6E09BB222B8DDA0404E51E62 /* AccelerometerPipeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D77A3F5346BF9BDE6EF952 /* AccelerometerPipeline.swift */; };
 		76A2BBE3B4F3E0E15C0E59A1 /* SeismoscopeKit in Frameworks */ = {isa = PBXBuildFile; productRef = FB3E985C115470D2E0D9BFB9 /* SeismoscopeKit */; };
+		76B72BB89D69690CA4D61EC1 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4867C17955CCAA4AA1594E22 /* AppState.swift */; };
 		773FCE326035D60D3E69AF7A /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 0AD627BCFCB86AA917AAC35A /* Shaders.metal */; };
 		7AD315E33C8C54883EAB35A0 /* TextureGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44BF9F4688FA4B77B5B50477 /* TextureGenerator.swift */; };
+		7E5E7FA35F0DA66804DFE529 /* device_profiles.json in Resources */ = {isa = PBXBuildFile; fileRef = 42192F19142A9B009F5134CE /* device_profiles.json */; };
 		7F0377A745261B2F4BC26741 /* RibbonContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC94003FBAAEF9A82D93A25B /* RibbonContainerView.swift */; };
 		8A16795044A292C52EADE693 /* StatusBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88C78C52DEBB1049F60B1083 /* StatusBarView.swift */; };
+		95EB806BAEEB1BDC989704F5 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = D9F47C3DE190907CD2C931BA /* PrivacyInfo.xcprivacy */; };
+		993E4616971EE2DCB6E2EA2A /* regions.json in Resources */ = {isa = PBXBuildFile; fileRef = 617444460264F01E67FFEE44 /* regions.json */; };
 		9CED016C751659BA8016C6EE /* EventCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A3B69891EF595EE9DF2B408 /* EventCoordinator.swift */; };
 		AEC48B590F2F5607ECBCA433 /* RibbonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEBFFFD1D6B70F6E115EFEB1 /* RibbonState.swift */; };
+		B1D6436917CA0317BF18C4A7 /* USGSClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED0F66276950E48BD796F9B2 /* USGSClient.swift */; };
 		B3FEB4266F6774EE93233E97 /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F3323CAAA78982A002045A7 /* Metal.framework */; };
+		C8E31B84827FDD18F14AE3FD /* USGSCorrelatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 966920D3D8B52A69DE87BB3B /* USGSCorrelatorTests.swift */; };
+		D133C24E9D692E61AAAF37CC /* USGSModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC10FB55BA6FA486BF2D684 /* USGSModels.swift */; };
 		F0E7E2CD91624D0577F91523 /* TextLabelCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A35DBBEA6D85B398D418047 /* TextLabelCache.swift */; };
 		F183C5A0185E616AA41EF935 /* MetalRibbonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A552BCB4A4BD0D0B6229E5D /* MetalRibbonView.swift */; };
-		9C10B8CDAE0B442FA3EACB80 /* SeismicEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94D6C83468534FF7A064AB37 /* SeismicEvent.swift */; };
-		828769E23A96442D98E2BE01 /* RegionPreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = A60F163C8FD54C38BCAED4C7 /* RegionPreset.swift */; };
-		9979FC32707540B6B3A757EE /* USGSModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C46541C560349C3AC2D7C9F /* USGSModels.swift */; };
-		B89EA539E1344394BDB8A8E3 /* USGSClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20BBF22CFF604578865033EA /* USGSClient.swift */; };
-		70006385AE5F45B48A703C7C /* USGSCorrelator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA688141FF3A45268E3F2D2E /* USGSCorrelator.swift */; };
-		64475474308C443FB90A978B /* EventDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DC35BE7133A4F93AAB77C94 /* EventDetailView.swift */; };
-		2353944275404A6198DC597E /* USGSCorrelatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7397D5EC9EC74A4B9DD7B2FB /* USGSCorrelatorTests.swift */; };
-		A1B2C3D4E5F60007AABBCCDD /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60006AABBCCDD /* AppState.swift */; };
-		A1B2C3D4E5F60009AABBCCDD /* DeviceProfileLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60008AABBCCDD /* DeviceProfileLoader.swift */; };
-		A1B2C3D4E5F6000BAABBCCDD /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000AAABBCCDD /* SettingsView.swift */; };
-		A1B2C3D4E5F60003AABBCCDD /* regions.json in Resources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60002AABBCCDD /* regions.json */; };
-		A1B2C3D4E5F60005AABBCCDD /* device_profiles.json in Resources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60004AABBCCDD /* device_profiles.json */; };
+		F647871AB1BB54CCEA1FD36C /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16FB167F2BB2ED8B7DB60FAC /* SettingsView.swift */; };
+		FB68E4F1561DDC28C145A1AA /* DeviceProfileLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB6242868917904B120D0475 /* DeviceProfileLoader.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,37 +50,38 @@
 
 /* Begin PBXFileReference section */
 		0AD627BCFCB86AA917AAC35A /* Shaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
+		16FB167F2BB2ED8B7DB60FAC /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		29273D90BF5C136CC92343D6 /* SeismoscopeKit */ = {isa = PBXFileReference; lastKnownFileType = folder; name = SeismoscopeKit; path = SeismoscopeKit; sourceTree = SOURCE_ROOT; };
+		2EC10FB55BA6FA486BF2D684 /* USGSModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = USGSModels.swift; sourceTree = "<group>"; };
+		38C3B5725FAC84B58383B8B5 /* EventDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDetailView.swift; sourceTree = "<group>"; };
+		42192F19142A9B009F5134CE /* device_profiles.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = device_profiles.json; sourceTree = "<group>"; };
 		44BF9F4688FA4B77B5B50477 /* TextureGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextureGenerator.swift; sourceTree = "<group>"; };
 		46E11FB51CF211513B24D12E /* SyntheticDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyntheticDataSource.swift; sourceTree = "<group>"; };
+		4867C17955CCAA4AA1594E22 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		57E8F32103D7B89A49FE577C /* SeismoscopeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeismoscopeApp.swift; sourceTree = "<group>"; };
 		5A35DBBEA6D85B398D418047 /* TextLabelCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextLabelCache.swift; sourceTree = "<group>"; };
 		5B8C3E81129125DC5BEBEFD5 /* SeismoscopeTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = SeismoscopeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		617444460264F01E67FFEE44 /* regions.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = regions.json; sourceTree = "<group>"; };
 		797827C2FCBBCDD28DCD96AB /* MetalKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MetalKit.framework; path = System/Library/Frameworks/MetalKit.framework; sourceTree = SDKROOT; };
 		88C78C52DEBB1049F60B1083 /* StatusBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBarView.swift; sourceTree = "<group>"; };
 		8F3323CAAA78982A002045A7 /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
+		966920D3D8B52A69DE87BB3B /* USGSCorrelatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = USGSCorrelatorTests.swift; sourceTree = "<group>"; };
+		988197E29C5D75DE6FCC0101 /* RegionPreset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegionPreset.swift; sourceTree = "<group>"; };
 		9A3B69891EF595EE9DF2B408 /* EventCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCoordinator.swift; sourceTree = "<group>"; };
 		9A552BCB4A4BD0D0B6229E5D /* MetalRibbonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalRibbonView.swift; sourceTree = "<group>"; };
 		AF96430BBE95505B36425201 /* Seismoscope.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Seismoscope.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		CB6242868917904B120D0475 /* DeviceProfileLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceProfileLoader.swift; sourceTree = "<group>"; };
 		CC556C16C29A2F9765514189 /* SeismoscopeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeismoscopeTests.swift; sourceTree = "<group>"; };
 		D2863554DDD0ADB49BE315DC /* Seismoscope-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Seismoscope-Bridging-Header.h"; sourceTree = "<group>"; };
 		D2D77A3F5346BF9BDE6EF952 /* AccelerometerPipeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccelerometerPipeline.swift; sourceTree = "<group>"; };
+		D4FD10E3DEC72F25279130A4 /* USGSCorrelator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = USGSCorrelator.swift; sourceTree = "<group>"; };
+		D9F47C3DE190907CD2C931BA /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		DEBFFFD1D6B70F6E115EFEB1 /* RibbonState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RibbonState.swift; sourceTree = "<group>"; };
 		DF79CCDD604E7973C1100EA7 /* RibbonRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RibbonRenderer.swift; sourceTree = "<group>"; };
+		E4BD71D97B00D32453DDFAEA /* SeismicEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeismicEvent.swift; sourceTree = "<group>"; };
+		ED0F66276950E48BD796F9B2 /* USGSClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = USGSClient.swift; sourceTree = "<group>"; };
 		FC600610AF749C94E7E2B83B /* ShaderTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShaderTypes.h; sourceTree = "<group>"; };
 		FC94003FBAAEF9A82D93A25B /* RibbonContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RibbonContainerView.swift; sourceTree = "<group>"; };
-		94D6C83468534FF7A064AB37 /* SeismicEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeismicEvent.swift; sourceTree = "<group>"; };
-		A60F163C8FD54C38BCAED4C7 /* RegionPreset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegionPreset.swift; sourceTree = "<group>"; };
-		6C46541C560349C3AC2D7C9F /* USGSModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = USGSModels.swift; sourceTree = "<group>"; };
-		20BBF22CFF604578865033EA /* USGSClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = USGSClient.swift; sourceTree = "<group>"; };
-		BA688141FF3A45268E3F2D2E /* USGSCorrelator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = USGSCorrelator.swift; sourceTree = "<group>"; };
-		1DC35BE7133A4F93AAB77C94 /* EventDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDetailView.swift; sourceTree = "<group>"; };
-		7397D5EC9EC74A4B9DD7B2FB /* USGSCorrelatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = USGSCorrelatorTests.swift; sourceTree = "<group>"; };
-		A1B2C3D4E5F60006AABBCCDD /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
-		A1B2C3D4E5F60008AABBCCDD /* DeviceProfileLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceProfileLoader.swift; sourceTree = "<group>"; };
-		A1B2C3D4E5F6000AAABBCCDD /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
-		A1B2C3D4E5F60002AABBCCDD /* regions.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = regions.json; sourceTree = "<group>"; };
-		A1B2C3D4E5F60004AABBCCDD /* device_profiles.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = device_profiles.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -126,9 +128,9 @@
 		6638A8937881E10FED2D856D /* App */ = {
 			isa = PBXGroup;
 			children = (
+				4867C17955CCAA4AA1594E22 /* AppState.swift */,
+				CB6242868917904B120D0475 /* DeviceProfileLoader.swift */,
 				57E8F32103D7B89A49FE577C /* SeismoscopeApp.swift */,
-				A1B2C3D4E5F60006AABBCCDD /* AppState.swift */,
-				A1B2C3D4E5F60008AABBCCDD /* DeviceProfileLoader.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -153,7 +155,7 @@
 				F0DB495D60C0C68D621DF3DA /* Models */,
 				C8081323AB49D1BCC5B7DF1F /* Resources */,
 				5211DF58D8FCD59482D6A400 /* Support */,
-				189D588AD65F4FA9BFC43460 /* USGS */,
+				C7A9DE3C7E3113DB5933C796 /* USGS */,
 				CB139ECB60D746C4745A5788 /* Views */,
 			);
 			path = Seismoscope;
@@ -172,7 +174,7 @@
 			isa = PBXGroup;
 			children = (
 				CC556C16C29A2F9765514189 /* SeismoscopeTests.swift */,
-				7397D5EC9EC74A4B9DD7B2FB /* USGSCorrelatorTests.swift */,
+				966920D3D8B52A69DE87BB3B /* USGSCorrelatorTests.swift */,
 			);
 			path = SeismoscopeTests;
 			sourceTree = "<group>";
@@ -190,11 +192,22 @@
 			path = Metal;
 			sourceTree = "<group>";
 		};
+		C7A9DE3C7E3113DB5933C796 /* USGS */ = {
+			isa = PBXGroup;
+			children = (
+				ED0F66276950E48BD796F9B2 /* USGSClient.swift */,
+				D4FD10E3DEC72F25279130A4 /* USGSCorrelator.swift */,
+				2EC10FB55BA6FA486BF2D684 /* USGSModels.swift */,
+			);
+			path = USGS;
+			sourceTree = "<group>";
+		};
 		C8081323AB49D1BCC5B7DF1F /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				A1B2C3D4E5F60002AABBCCDD /* regions.json */,
-				A1B2C3D4E5F60004AABBCCDD /* device_profiles.json */,
+				42192F19142A9B009F5134CE /* device_profiles.json */,
+				D9F47C3DE190907CD2C931BA /* PrivacyInfo.xcprivacy */,
+				617444460264F01E67FFEE44 /* regions.json */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -202,22 +215,12 @@
 		CB139ECB60D746C4745A5788 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				38C3B5725FAC84B58383B8B5 /* EventDetailView.swift */,
 				FC94003FBAAEF9A82D93A25B /* RibbonContainerView.swift */,
+				16FB167F2BB2ED8B7DB60FAC /* SettingsView.swift */,
 				88C78C52DEBB1049F60B1083 /* StatusBarView.swift */,
-				1DC35BE7133A4F93AAB77C94 /* EventDetailView.swift */,
-				A1B2C3D4E5F6000AAABBCCDD /* SettingsView.swift */,
 			);
 			path = Views;
-			sourceTree = "<group>";
-		};
-		189D588AD65F4FA9BFC43460 /* USGS */ = {
-			isa = PBXGroup;
-			children = (
-				6C46541C560349C3AC2D7C9F /* USGSModels.swift */,
-				20BBF22CFF604578865033EA /* USGSClient.swift */,
-				BA688141FF3A45268E3F2D2E /* USGSCorrelator.swift */,
-			);
-			path = USGS;
 			sourceTree = "<group>";
 		};
 		D6D2D6AC3C1D9B2752B508F0 /* Packages */ = {
@@ -231,9 +234,9 @@
 		F0DB495D60C0C68D621DF3DA /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				988197E29C5D75DE6FCC0101 /* RegionPreset.swift */,
 				DEBFFFD1D6B70F6E115EFEB1 /* RibbonState.swift */,
-				94D6C83468534FF7A064AB37 /* SeismicEvent.swift */,
-				A60F163C8FD54C38BCAED4C7 /* RegionPreset.swift */,
+				E4BD71D97B00D32453DDFAEA /* SeismicEvent.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -264,8 +267,8 @@
 			buildConfigurationList = 82E9D9C64F91D192D0E5DD5D /* Build configuration list for PBXNativeTarget "Seismoscope" */;
 			buildPhases = (
 				B352B42A9DBF4C3CFE805049 /* Sources */,
+				41FA73445FCDC735E1F9F5A2 /* Resources */,
 				9D370E4C0EB8A82C5F13D448 /* Frameworks */,
-				A1B2C3D4E5F60001AABBCCDD /* Resources */,
 			);
 			buildRules = (
 			);
@@ -288,6 +291,9 @@
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
+					62F9092358A28285E18A6C69 = {
+						DevelopmentTeam = 3TGZFKFNA4;
+					};
 				};
 			};
 			buildConfigurationList = 36BCACC872D21000EE7A6BBC /* Build configuration list for PBXProject "Seismoscope" */;
@@ -314,12 +320,13 @@
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		A1B2C3D4E5F60001AABBCCDD /* Resources */ = {
+		41FA73445FCDC735E1F9F5A2 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A1B2C3D4E5F60003AABBCCDD /* regions.json in Resources */,
-				A1B2C3D4E5F60005AABBCCDD /* device_profiles.json in Resources */,
+				95EB806BAEEB1BDC989704F5 /* PrivacyInfo.xcprivacy in Resources */,
+				7E5E7FA35F0DA66804DFE529 /* device_profiles.json in Resources */,
+				993E4616971EE2DCB6E2EA2A /* regions.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -331,7 +338,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				54FE851877438176CF7E86A8 /* SeismoscopeTests.swift in Sources */,
-				2353944275404A6198DC597E /* USGSCorrelatorTests.swift in Sources */,
+				C8E31B84827FDD18F14AE3FD /* USGSCorrelatorTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -340,26 +347,26 @@
 			buildActionMask = 2147483647;
 			files = (
 				6E09BB222B8DDA0404E51E62 /* AccelerometerPipeline.swift in Sources */,
-				9C10B8CDAE0B442FA3EACB80 /* SeismicEvent.swift in Sources */,
-				828769E23A96442D98E2BE01 /* RegionPreset.swift in Sources */,
+				76B72BB89D69690CA4D61EC1 /* AppState.swift in Sources */,
+				FB68E4F1561DDC28C145A1AA /* DeviceProfileLoader.swift in Sources */,
 				9CED016C751659BA8016C6EE /* EventCoordinator.swift in Sources */,
-				64475474308C443FB90A978B /* EventDetailView.swift in Sources */,
+				1213194489225F9621AECB3D /* EventDetailView.swift in Sources */,
 				F183C5A0185E616AA41EF935 /* MetalRibbonView.swift in Sources */,
+				33A338D3DBBA555319DEEFA7 /* RegionPreset.swift in Sources */,
 				7F0377A745261B2F4BC26741 /* RibbonContainerView.swift in Sources */,
 				17318FC907241B4E1A800967 /* RibbonRenderer.swift in Sources */,
 				AEC48B590F2F5607ECBCA433 /* RibbonState.swift in Sources */,
+				0316063F62E41C6B94A143CD /* SeismicEvent.swift in Sources */,
 				6269ABFE908ADC327C54D17C /* SeismoscopeApp.swift in Sources */,
-				A1B2C3D4E5F60007AABBCCDD /* AppState.swift in Sources */,
-				A1B2C3D4E5F60009AABBCCDD /* DeviceProfileLoader.swift in Sources */,
+				F647871AB1BB54CCEA1FD36C /* SettingsView.swift in Sources */,
 				773FCE326035D60D3E69AF7A /* Shaders.metal in Sources */,
 				8A16795044A292C52EADE693 /* StatusBarView.swift in Sources */,
-				A1B2C3D4E5F6000BAABBCCDD /* SettingsView.swift in Sources */,
 				25972A2C3E2F3DD5C5266D41 /* SyntheticDataSource.swift in Sources */,
 				F0E7E2CD91624D0577F91523 /* TextLabelCache.swift in Sources */,
 				7AD315E33C8C54883EAB35A0 /* TextureGenerator.swift in Sources */,
-				9979FC32707540B6B3A757EE /* USGSModels.swift in Sources */,
-				B89EA539E1344394BDB8A8E3 /* USGSClient.swift in Sources */,
-				70006385AE5F45B48A703C7C /* USGSCorrelator.swift in Sources */,
+				B1D6436917CA0317BF18C4A7 /* USGSClient.swift in Sources */,
+				647CDDAB995162F2A1DE4C0C /* USGSCorrelator.swift in Sources */,
+				D133C24E9D692E61AAAF37CC /* USGSModels.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -444,6 +451,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = 3TGZFKFNA4;
 				GENERATE_INFOPLIST_FILE = YES;
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/Seismoscope/Metal";
 				INFOPLIST_KEY_NSMotionUsageDescription = "Seismoscope uses your iPhone's accelerometer to detect ground vibrations and display them as a seismogram.";
@@ -560,6 +568,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = 3TGZFKFNA4;
 				GENERATE_INFOPLIST_FILE = YES;
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/Seismoscope/Metal";
 				INFOPLIST_KEY_NSMotionUsageDescription = "Seismoscope uses your iPhone's accelerometer to detect ground vibrations and display them as a seismogram.";
