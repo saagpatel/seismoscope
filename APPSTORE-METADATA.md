@@ -164,3 +164,6 @@ No account, no credentials, no reviewer login required.
 - [ ] TestFlight test complete: run app on desk for 5 minutes, verify tap detection, verify USGS query fires, verify event detail sheet
 - [ ] Test on physical device — simulator does not provide real accelerometer data for final validation
 - [ ] Submit for Review
+
+## Copyright
+© 2026 saagpatel
