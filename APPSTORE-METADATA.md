@@ -75,13 +75,13 @@ Your iPhone as a vintage seismograph. 100Hz accelerometer → Butterworth filter
 
 ## Support URL
 
-*(Enter your support URL — e.g. a GitHub repo or personal site)*
+https://github.com/saagpatel/seismoscope/issues
 
 ---
 
 ## Privacy Policy URL
 
-*(Required — can be a simple page; note that no personal data is collected)*
+https://github.com/saagpatel/seismoscope/blob/main/PRIVACY.md
 
 ---
 
