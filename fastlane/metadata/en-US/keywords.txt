@@ -1,0 +1,1 @@
+seismometer,earthquake,accelerometer,seismograph,vibration,ground motion,USGS,science,physics

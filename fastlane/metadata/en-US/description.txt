@@ -1,0 +1,32 @@
+Your iPhone has a precision accelerometer sampling 100 times per second. Seismoscope uses it the way seismologists have used instruments since 1935 — to detect ground motion, record it as a scrolling waveform, and cross-reference detected events against the USGS earthquake catalog.
+
+The display looks like a vintage drum seismograph: parchment-textured paper scrolling at one pixel per second, an ink trace that thickens and bleeds when amplitude spikes. When the app detects a vibration event, it automatically queries the USGS earthquake API and annotates the ribbon with magnitude and location if a match is found. If no match is found after three attempts, the event is labeled as a local vibration.
+
+Signal processing:
+• 100Hz CoreMotion pipeline — raw accelerometer data at maximum resolution
+• 4-pole Butterworth bandpass filter (0.1–10Hz) — removes gravity, isolates ground motion frequencies
+• STA/LTA event detection — the same algorithm used in professional seismograph networks
+• Automatic re-arm — detects multiple separate events without manual reset
+
+The display:
+• Scrolling Metal ribbon renderer — procedurally generated parchment texture, 60fps
+• Variable-width ink trace — line thickens proportionally to measured acceleration
+• Gaussian blur "ink bleed" on high-amplitude signals — physically authentic
+• Time markers — vertical lines at 60-second intervals with clock times
+• Event annotations with fade-in — labeled with magnitude and location when matched
+
+USGS integration:
+• Automatic earthquake correlation — queries USGS FDSN Event API after any detected event
+• Deferred retry — checks up to 3 times over 6 minutes (earthquakes may not appear in catalog immediately)
+• Match criteria — within 500km and 10 minutes of detected onset, magnitude ≥ 1.5
+• Full event detail — magnitude, depth, distance, and a link to the USGS event page
+
+Settings:
+• Region picker — 50 city presets, or enter custom coordinates
+• Sensitivity slider — tune the STA/LTA threshold from more to less sensitive
+• Units toggle — milli-g or plain-language MMI intensity scale
+• Low-power mode — reduces to 50Hz sampling and pauses the Metal renderer
+
+No GPS. No accounts. No subscriptions. Your region is set by city picker — Seismoscope never requests your location. The only outbound network call is a read-only earthquake query sent to the USGS API (which is public, unauthenticated, and free). No user data leaves your device.
+
+The signal processing layer is published separately as SeismoscopeKit, an open-source Swift Package on GitHub.
