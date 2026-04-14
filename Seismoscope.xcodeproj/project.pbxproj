@@ -13,6 +13,7 @@
 		1807BCD3F2C2DEBD85A20B33 /* MetalKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 797827C2FCBBCDD28DCD96AB /* MetalKit.framework */; };
 		25972A2C3E2F3DD5C5266D41 /* SyntheticDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46E11FB51CF211513B24D12E /* SyntheticDataSource.swift */; };
 		33A338D3DBBA555319DEEFA7 /* RegionPreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 988197E29C5D75DE6FCC0101 /* RegionPreset.swift */; };
+		46E69E70664457459BD9A968 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5D07841C88F8D73E68FDA35B /* Assets.xcassets */; };
 		54FE851877438176CF7E86A8 /* SeismoscopeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC556C16C29A2F9765514189 /* SeismoscopeTests.swift */; };
 		6269ABFE908ADC327C54D17C /* SeismoscopeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E8F32103D7B89A49FE577C /* SeismoscopeApp.swift */; };
 		647CDDAB995162F2A1DE4C0C /* USGSCorrelator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4FD10E3DEC72F25279130A4 /* USGSCorrelator.swift */; };
@@ -61,6 +62,7 @@
 		57E8F32103D7B89A49FE577C /* SeismoscopeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeismoscopeApp.swift; sourceTree = "<group>"; };
 		5A35DBBEA6D85B398D418047 /* TextLabelCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextLabelCache.swift; sourceTree = "<group>"; };
 		5B8C3E81129125DC5BEBEFD5 /* SeismoscopeTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = SeismoscopeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		5D07841C88F8D73E68FDA35B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		617444460264F01E67FFEE44 /* regions.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = regions.json; sourceTree = "<group>"; };
 		797827C2FCBBCDD28DCD96AB /* MetalKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MetalKit.framework; path = System/Library/Frameworks/MetalKit.framework; sourceTree = SDKROOT; };
 		88C78C52DEBB1049F60B1083 /* StatusBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBarView.swift; sourceTree = "<group>"; };
@@ -205,6 +207,7 @@
 		C8081323AB49D1BCC5B7DF1F /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				5D07841C88F8D73E68FDA35B /* Assets.xcassets */,
 				42192F19142A9B009F5134CE /* device_profiles.json */,
 				D9F47C3DE190907CD2C931BA /* PrivacyInfo.xcprivacy */,
 				617444460264F01E67FFEE44 /* regions.json */,
@@ -293,6 +296,7 @@
 				TargetAttributes = {
 					62F9092358A28285E18A6C69 = {
 						DevelopmentTeam = 3TGZFKFNA4;
+						ProvisioningStyle = Manual;
 					};
 				};
 			};
@@ -324,6 +328,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				46E69E70664457459BD9A968 /* Assets.xcassets in Resources */,
 				95EB806BAEEB1BDC989704F5 /* PrivacyInfo.xcprivacy in Resources */,
 				7E5E7FA35F0DA66804DFE529 /* device_profiles.json in Resources */,
 				993E4616971EE2DCB6E2EA2A /* regions.json in Resources */,
@@ -450,7 +455,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Apple Distribution: SAAGAR I PATEL (3TGZFKFNA4)";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 3TGZFKFNA4;
 				GENERATE_INFOPLIST_FILE = YES;
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/Seismoscope/Metal";
@@ -463,8 +470,10 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.0;
 				MTL_HEADER_SEARCH_PATHS = "$(SRCROOT)/Seismoscope/Metal";
 				PRODUCT_BUNDLE_IDENTIFIER = com.seismoscope.app;
+				PROVISIONING_PROFILE_SPECIFIER = "Seismoscope App Store";
 				SDKROOT = iphoneos;
 				SWIFT_OBJC_BRIDGING_HEADER = "Seismoscope/Support/Seismoscope-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -567,7 +576,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Apple Distribution: SAAGAR I PATEL (3TGZFKFNA4)";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 3TGZFKFNA4;
 				GENERATE_INFOPLIST_FILE = YES;
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/Seismoscope/Metal";
@@ -580,8 +591,10 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.0;
 				MTL_HEADER_SEARCH_PATHS = "$(SRCROOT)/Seismoscope/Metal";
 				PRODUCT_BUNDLE_IDENTIFIER = com.seismoscope.app;
+				PROVISIONING_PROFILE_SPECIFIER = "Seismoscope App Store";
 				SDKROOT = iphoneos;
 				SWIFT_OBJC_BRIDGING_HEADER = "Seismoscope/Support/Seismoscope-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = "1,2";
