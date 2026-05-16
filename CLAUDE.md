@@ -61,3 +61,46 @@ See IMPLEMENTATION-ROADMAP.md for full task list and acceptance criteria.
 - Do not use `localStorage`, `UserDefaults` for event data — SwiftData only
 - Do not write Metal shaders that assume a fixed canvas size — use dynamic viewport
 - Do not add features not in the current phase of IMPLEMENTATION-ROADMAP.md
+
+<!-- portfolio-context:start -->
+# Portfolio Context
+
+## What This Project Is
+
+iOS app (iPhone + iPad) that turns the device accelerometer into a vintage 1930s seismometer. Core loop: 100Hz CoreMotion → 4-pole Butterworth bandpass filter → STA/LTA event detector → Metal ribbon renderer → USGS earthquake cross-reference. The signal processing layer is extracted into a standalone Swift Package (SeismoscopeKit) and open-sourced separately. Portfolio project — the point is the full-stack DSP → rendering → live API correlation chain.
+
+## Current State
+
+**Phase 0: Metal Ribbon Renderer**
+Build the ribbon with synthetic data. No CoreMotion, no USGS, no SwiftData in this phase.
+See IMPLEMENTATION-ROADMAP.md for full task list and acceptance criteria.
+
+## Stack
+
+- Swift: 5.9+
+- SwiftUI: iOS 17+ (minimum deployment target — SwiftData requires 17)
+- CoreMotion: CMMotionManager at 100Hz, background queue
+- Metal + MetalKit: 60fps ribbon renderer (MTKView subclass)
+- SwiftData: On-device event log only, no iCloud sync
+- URLSession: USGS FDSN Event API (no third-party HTTP libs)
+- SeismoscopeKit: Local Swift Package — zero external dependencies, zero app imports
+
+## How To Run
+
+Deploy to a physical device. Place the phone on a stable surface and tap **Start Recording**. Detected events appear as annotations on the waveform; tap any to see USGS match details.
+
+## Known Risks
+
+- Do not use `ObservableObject` — use `@Observable` macro throughout
+- Do not import SeismoscopeKit modules into other SeismoscopeKit modules — it must build standalone
+- Do not request background motion processing in v1 — foreground only
+- Do not add `CoreLocation` — region is user-configured via city picker, never GPS
+- Do not use `localStorage`, `UserDefaults` for event data — SwiftData only
+- Do not write Metal shaders that assume a fixed canvas size — use dynamic viewport
+- Do not add features not in the current phase of IMPLEMENTATION-ROADMAP.md
+
+## Next Recommended Move
+
+Use this context plus the README and supporting docs to resume the next active task, then promote the repo beyond minimum-viable by capturing a dedicated handoff, roadmap, or discovery artifact.
+
+<!-- portfolio-context:end -->
