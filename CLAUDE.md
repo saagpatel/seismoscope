@@ -37,9 +37,8 @@ Seismoscope/               ← Xcode project root
 - Unit tests for all DSP transforms before committing to SeismoscopeKit
 - Conventional commits: `feat:`, `fix:`, `chore:`, `test:`
 
-## Current Phase
-**All phases complete (0–3).** CoreMotion pipeline, Butterworth DSP, STA/LTA detection, Metal ribbon renderer, USGS cross-reference, SwiftData event log, and Settings are all implemented. Pending App Store submission.
-See IMPLEMENTATION-ROADMAP.md for phase details and acceptance criteria.
+## Status
+Phases 0–3 complete. Pending App Store submission. See IMPLEMENTATION-ROADMAP.md for phase details and acceptance criteria.
 
 ## Key Decisions
 | Decision | Choice | Rationale |
@@ -52,14 +51,14 @@ See IMPLEMENTATION-ROADMAP.md for phase details and acceptance criteria.
 | Circular buffer | 120s × 100Hz = 12,000 samples/axis | 144KB total — trivial; covers full LTA window |
 | Units | Dual: milli-g + plain language MMI label | Power users + general audience |
 
-## Do NOT
-- Do not use `ObservableObject` — use `@Observable` macro throughout
-- Do not import SeismoscopeKit modules into other SeismoscopeKit modules — it must build standalone
-- Do not request background motion processing in v1 — foreground only
-- Do not add `CoreLocation` — region is user-configured via city picker, never GPS
-- Do not use `localStorage`, `UserDefaults` for event data — SwiftData only
-- Do not write Metal shaders that assume a fixed canvas size — use dynamic viewport
-- Do not add features outside the v1 scope defined in IMPLEMENTATION-ROADMAP.md
+## Constraints
+- State: use `@Observable` macro throughout; `ObservableObject` is the wrong pattern here.
+- SeismoscopeKit isolation: keep it standalone — no cross-module imports within the package.
+- Background motion: foreground-only in v1; background mode entanglement requires App Store entitlement.
+- Region: city picker only — no `CoreLocation`, no GPS.
+- Event persistence: SwiftData only; `UserDefaults` is not the store for event data.
+- Metal viewports: shaders must use dynamic viewport — no fixed canvas size assumptions.
+- Scope gate: features outside the v1 scope in IMPLEMENTATION-ROADMAP.md need a phase decision, not an inline addition.
 
 <!-- portfolio-context:start -->
 # Portfolio Context
