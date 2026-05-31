@@ -4,7 +4,7 @@
 iOS app (iPhone + iPad) that turns the device accelerometer into a vintage 1930s seismometer. Core loop: 100Hz CoreMotion → 4-pole Butterworth bandpass filter → STA/LTA event detector → Metal ribbon renderer → USGS earthquake cross-reference. The signal processing layer is extracted into a standalone Swift Package (SeismoscopeKit) and open-sourced separately. Portfolio project — the point is the full-stack DSP → rendering → live API correlation chain.
 
 ## Tech Stack
-- Swift: 5.9+
+- Swift: 6.0 (strict concurrency)
 - SwiftUI: iOS 17+ (minimum deployment target — SwiftData requires 17)
 - CoreMotion: CMMotionManager at 100Hz, background queue
 - Metal + MetalKit: 60fps ribbon renderer (MTKView subclass)
@@ -38,9 +38,8 @@ Seismoscope/               ← Xcode project root
 - Conventional commits: `feat:`, `fix:`, `chore:`, `test:`
 
 ## Current Phase
-**Phase 0: Metal Ribbon Renderer**
-Build the ribbon with synthetic data. No CoreMotion, no USGS, no SwiftData in this phase.
-See IMPLEMENTATION-ROADMAP.md for full task list and acceptance criteria.
+**All phases complete (0–3).** CoreMotion pipeline, Butterworth DSP, STA/LTA detection, Metal ribbon renderer, USGS cross-reference, SwiftData event log, and Settings are all implemented. Pending App Store submission.
+See IMPLEMENTATION-ROADMAP.md for phase details and acceptance criteria.
 
 ## Key Decisions
 | Decision | Choice | Rationale |
@@ -60,7 +59,7 @@ See IMPLEMENTATION-ROADMAP.md for full task list and acceptance criteria.
 - Do not add `CoreLocation` — region is user-configured via city picker, never GPS
 - Do not use `localStorage`, `UserDefaults` for event data — SwiftData only
 - Do not write Metal shaders that assume a fixed canvas size — use dynamic viewport
-- Do not add features not in the current phase of IMPLEMENTATION-ROADMAP.md
+- Do not add features outside the v1 scope defined in IMPLEMENTATION-ROADMAP.md
 
 <!-- portfolio-context:start -->
 # Portfolio Context
@@ -71,13 +70,11 @@ iOS app (iPhone + iPad) that turns the device accelerometer into a vintage 1930s
 
 ## Current State
 
-**Phase 0: Metal Ribbon Renderer**
-Build the ribbon with synthetic data. No CoreMotion, no USGS, no SwiftData in this phase.
-See IMPLEMENTATION-ROADMAP.md for full task list and acceptance criteria.
+**All phases complete (0–3).** CoreMotion pipeline, Butterworth DSP, STA/LTA detection, Metal ribbon renderer, USGS cross-reference, SwiftData event log, and Settings are all implemented. Pending App Store submission.
 
 ## Stack
 
-- Swift: 5.9+
+- Swift: 6.0 (strict concurrency)
 - SwiftUI: iOS 17+ (minimum deployment target — SwiftData requires 17)
 - CoreMotion: CMMotionManager at 100Hz, background queue
 - Metal + MetalKit: 60fps ribbon renderer (MTKView subclass)
@@ -97,10 +94,10 @@ Deploy to a physical device. Place the phone on a stable surface and tap **Start
 - Do not add `CoreLocation` — region is user-configured via city picker, never GPS
 - Do not use `localStorage`, `UserDefaults` for event data — SwiftData only
 - Do not write Metal shaders that assume a fixed canvas size — use dynamic viewport
-- Do not add features not in the current phase of IMPLEMENTATION-ROADMAP.md
+- Do not add features outside the v1 scope defined in IMPLEMENTATION-ROADMAP.md
 
 ## Next Recommended Move
 
-Use this context plus the README and supporting docs to resume the next active task, then promote the repo beyond minimum-viable by capturing a dedicated handoff, roadmap, or discovery artifact.
+All v1 phases are complete. Next step is App Store submission: verify `PrivacyInfo.xcprivacy` Core Motion Required Reason declaration, confirm DEVELOPMENT_TEAM in Xcode, archive, and submit.
 
 <!-- portfolio-context:end -->

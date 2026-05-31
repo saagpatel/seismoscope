@@ -25,7 +25,8 @@ Seismoscope turns your iPhone into a real seismograph. Raw accelerometer data pa
 ### Installation
 ```bash
 git clone https://github.com/saagpatel/seismoscope
-open seismoscope.xcodeproj
+cd seismoscope
+open Seismoscope.xcodeproj
 ```
 
 ### Usage
@@ -44,7 +45,7 @@ Deploy to a physical device. Place the phone on a stable surface and tap **Start
 
 ## Architecture
 
-CoreMotion pushes accelerometer samples to a ring buffer on a real-time thread. A `DSPProcessor` actor applies the filter chain and STA/LTA detection, emitting `SeismicEvent` values when threshold crossings occur. The Metal renderer reads the ring buffer directly via a shared `MTLBuffer`, avoiding any copy on the hot path. USGS correlation happens in a background `Task` with exponential backoff retries, writing results back to SwiftData where `@Query` observers in the detail view pick them up.
+CoreMotion pushes accelerometer samples into an `AccelerometerPipeline` on a background queue. A private `PipelineState` object applies the filter chain and feeds the `STALTADetector`, yielding `TriggerEvent` values via `AsyncStream`. The `EventCoordinator` actor bridges these streams to the main actor, appending magnitudes to `RibbonState.samples` and persisting `SeismicEvent` records to SwiftData on each trigger. The Metal renderer copies the current samples into a triple-buffered `MTLBuffer` each frame. USGS correlation happens in a background `Task` with exponential backoff retries, writing results back to SwiftData; `EventDetailView` fetches the updated record on appearance via `FetchDescriptor`.
 
 ## License
 
