@@ -100,3 +100,8 @@ Deploy to a physical device. Place the phone on a stable surface and tap **Start
 All v1 phases are complete. Next step is App Store submission: verify `PrivacyInfo.xcprivacy` Core Motion Required Reason declaration, confirm DEVELOPMENT_TEAM in Xcode, archive, and submit.
 
 <!-- portfolio-context:end -->
+
+<!-- secondbrain-breadcrumb -->
+## SecondBrain knowledge vault
+
+Prior lessons, decisions, and context for this project live in SecondBrain at `wiki/maps/projects/seismoscope.md`. The whole vault is searchable via the `engraph` MCP — query it for this project + its stack before non-trivial work.
