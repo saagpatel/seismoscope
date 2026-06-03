@@ -45,7 +45,7 @@ Deploy to a physical device. Place the phone on a stable surface and tap **Start
 
 ## Architecture
 
-CoreMotion pushes accelerometer samples into an `AccelerometerPipeline` on a background queue. A private `PipelineState` object applies the filter chain and feeds the `STALTADetector`, yielding `TriggerEvent` values via `AsyncStream`. The `EventCoordinator` actor bridges these streams to the main actor, appending magnitudes to `RibbonState.samples` and persisting `SeismicEvent` records to SwiftData on each trigger. The Metal renderer copies the current samples into a triple-buffered `MTLBuffer` each frame. USGS correlation happens in a background `Task` with exponential backoff retries, writing results back to SwiftData; `EventDetailView` fetches the updated record on appearance via `FetchDescriptor`.
+CoreMotion pushes accelerometer samples into an `AccelerometerPipeline` on a background queue. A private `PipelineState` object applies the filter chain and feeds the `STALTADetector`, yielding `TriggerEvent` values via `AsyncStream`. The `EventCoordinator` (`@MainActor` class) bridges these streams to the main actor, appending magnitudes to `RibbonState.samples` and persisting `SeismicEvent` records to SwiftData on each trigger. The Metal renderer copies the current samples into a triple-buffered `MTLBuffer` each frame. USGS correlation happens in a background `Task` with fixed 120-second retry intervals (up to 3 attempts), writing results back to SwiftData; `EventDetailView` fetches the updated record on appearance via `FetchDescriptor`.
 
 ## License
 
