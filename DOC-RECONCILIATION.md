@@ -5,6 +5,11 @@ code as read-only ground truth and edits only documentation so it reflects the r
 state. No code was changed and no builds or tests were run. It explains the purpose of this file to
 anyone who finds it later.
 
+This is the **second pass** (2026-06-02). The first pass (2026-05-30 at `4cf5485`) corrected the
+bulk of the drift (Swift version, phase status, Architecture paragraph, install command). This pass
+found two residual factual errors in the Architecture paragraph and corrects an incorrect finding
+from the prior pass.
+
 ---
 
 ## Per-Claim Findings
@@ -12,121 +17,103 @@ anyone who finds it later.
 ### 1. What it is
 **Status:** consistent  
 **Evidence:** `verified-by-reading-code`  
-README introduction accurately describes the full app: 100 Hz CoreMotion → Butterworth filter chain
-→ STA/LTA detector → Metal ribbon renderer → USGS FDSN cross-reference. All components are
-implemented (`AccelerometerPipeline.swift`, `ButterworthFilter.swift`, `STALTADetector.swift`,
-`RibbonRenderer.swift`, `Shaders.metal`, `USGSClient.swift`, `USGSCorrelator.swift`,
-`EventCoordinator.swift`).
+README and CLAUDE.md introduction accurately describe the full app: 100 Hz CoreMotion →
+Butterworth filter chain → STA/LTA detector → Metal ribbon renderer → USGS FDSN cross-reference.
+All components are implemented (`AccelerometerPipeline.swift`, `ButterworthFilter.swift`,
+`STALTADetector.swift`, `RibbonRenderer.swift`, `Shaders.metal`, `USGSClient.swift`,
+`USGSCorrelator.swift`, `EventCoordinator.swift`).
 
 ---
 
 ### 2. Current state
-**Status:** drifted (fixed)  
-**Evidence:** `verified-by-reading-code`
-
-Both `CLAUDE.md` and its embedded Portfolio Context block stated:
-
-> **Phase 0: Metal Ribbon Renderer** — Build the ribbon with synthetic data. No CoreMotion, no
-> USGS, no SwiftData in this phase.
-
-Code inspection shows all four phases are complete:
-
-| Phase | Evidence |
-|-------|----------|
-| 0 — Metal ribbon | `MetalRibbonView.swift`, `RibbonRenderer.swift`, `Shaders.metal`, `TextureGenerator.swift`, `TextLabelCache.swift`, `SyntheticDataSource.swift`, `RibbonState.swift` |
-| 1 — CoreMotion DSP | `AccelerometerPipeline.swift`; SeismoscopeKit: `ButterworthFilter.swift`, `STALTADetector.swift`, `CircularBuffer.swift` |
-| 2 — USGS + annotations | `USGSClient.swift`, `USGSCorrelator.swift`, `EventCoordinator.swift`, `EventDetailView.swift`; annotation rendering in `RibbonRenderer.swift` |
-| 3 — App Store polish | `SettingsView.swift`, `DeviceProfileLoader.swift`, `AppState.swift`, `device_profiles.json`, `SeismoscopeKit/README.md`; App Store prep commits visible in `git log` |
-
-`docs/PORTFOLIO-DISPOSITION.md` independently confirms "Phases 0-3 per memory."
-
-**What changed in `CLAUDE.md`:**
-- `## Current Phase` block: "Phase 0: Metal Ribbon Renderer…" → "All phases complete (0–3)…"
-- Portfolio Context `## Current State` block: same update
-- Portfolio Context `## Next Recommended Move`: updated from generic placeholder to App Store submission steps
+**Status:** consistent  
+**Evidence:** `verified-by-reading-code`  
+CLAUDE.md states "Phases 0–3 complete. Pending App Store submission." All four phase artefacts are
+present in the repo. Portfolio Context block matches. `PrivacyInfo.xcprivacy` exists at
+`Seismoscope/Resources/PrivacyInfo.xcprivacy`, consistent with the App Store submission guidance in
+"Next Recommended Move" (that guidance itself is forward-looking — `unverifiable`).
 
 ---
 
 ### 3. Stack
-**Status:** drifted (fixed)  
-**Evidence:** `verified-by-reading-code` — `Seismoscope.xcodeproj/project.pbxproj:449,570`
-
-`CLAUDE.md` listed `Swift: 5.9+` in two places (main Tech Stack and Portfolio Context Stack).
-`project.pbxproj` sets `SWIFT_VERSION = 6` for both Debug and Release configurations. The README
-already correctly stated "Swift 6.0, strict concurrency."
-
-**What changed in `CLAUDE.md`:**
-- `## Tech Stack`: `Swift: 5.9+` → `Swift: 6.0 (strict concurrency)` (two occurrences)
+**Status:** consistent  
+**Evidence:** `verified-by-reading-code`  
+- README: "Swift 6.0, strict concurrency" — confirmed by `Seismoscope.xcodeproj/project.pbxproj`
+  `SWIFT_VERSION = 6`.
+- CLAUDE.md: "Swift: 6.0 (strict concurrency)" — same evidence.
+- `SeismoscopeKit/README.md`: "Swift 5.9+" — `SeismoscopeKit/Package.swift` sets
+  `swift-tools-version: 5.9`; the library sources use only `Foundation` and concurrency primitives
+  available since Swift 5.7, so 5.9+ as a minimum compatibility claim is accurate.
+- README Prerequisites: "Xcode 16+" — correct for a Swift 6.0 project.
 
 ---
 
 ### 4. How to run
-**Status:** drifted (fixed)  
-**Evidence:** `verified-by-reading-code` — `Seismoscope.xcodeproj/project.pbxproj` exists at that
-capitalisation.
-
-`README.md` Installation block:
-```bash
-git clone https://github.com/saagpatel/seismoscope
-open seismoscope.xcodeproj
-```
-Missing `cd seismoscope` after clone; xcodeproj filename had wrong capitalisation (`seismoscope`
-vs. `Seismoscope`). Fixed to:
-```bash
-git clone https://github.com/saagpatel/seismoscope
-cd seismoscope
-open Seismoscope.xcodeproj
-```
+**Status:** consistent  
+**Evidence:** `verified-by-reading-code`  
+README Installation block (`git clone … && cd seismoscope && open Seismoscope.xcodeproj`) was
+corrected in the prior pass. `Seismoscope.xcodeproj/project.pbxproj` exists with that capitalisation.
 
 ---
 
-### 5. Known risks (Do NOT list)
-**Status:** drifted (fixed)  
-**Evidence:** `verified-by-reading-code`
-
-Both Do NOT lists in `CLAUDE.md` ended with:
-> Do not add features not in the **current phase** of IMPLEMENTATION-ROADMAP.md
-
-With all phases complete there is no "current phase." Changed to:
-> Do not add features outside the **v1 scope** defined in IMPLEMENTATION-ROADMAP.md
+### 5. Known risks
+**Status:** consistent  
+**Evidence:** `verified-by-reading-code`  
+CLAUDE.md Constraints section accurately reflects the implementation:
+- `@Observable` only — no `ObservableObject` found in any app source file.
+- SeismoscopeKit isolation — no app-level imports (`import Seismoscope`) found in
+  `SeismoscopeKit/Sources/`.
+- Foreground only — `scenePhase == .background` triggers `stopPipeline()` in
+  `SeismoscopeApp.swift:55`.
+- No CoreLocation — absent from all source files.
+- SwiftData only for event data — `SeismicEvent` is `@Model`; settings use `UserDefaults`
+  (expected and noted in code comment).
+- Dynamic Metal viewport — `Shaders.metal` uses `uniforms.viewportSize` at line 50.
 
 ---
 
-### 6. Architecture description
-**Status:** drifted (fixed)  
-**Evidence:** `verified-by-reading-code` — `AccelerometerPipeline.swift`, `RibbonRenderer.swift:169-210`, `EventDetailView.swift:124-129`
+### 6. Architecture description (README)
+**Status:** drifted — fixed  
+**Evidence:** `verified-by-reading-code` — `EventCoordinator.swift:10`, `EventCoordinator.swift:124-131`
 
-`README.md` Architecture paragraph contained three factual errors:
+Two factual errors survived the prior pass:
 
-| Error | Reality | Fixed to |
-|-------|---------|----------|
-| "A `DSPProcessor` actor" | Private class `PipelineState` inside `AccelerometerPipeline`; no public `DSPProcessor` type | "A private `PipelineState` object…inside `AccelerometerPipeline`" |
-| "emitting `SeismicEvent` values" | Pipeline emits `TriggerEvent` via `AsyncStream`; `SeismicEvent` is the SwiftData model created later by `EventCoordinator` | "yielding `TriggerEvent` values via `AsyncStream`" |
-| "reads the ring buffer directly via a shared `MTLBuffer`" | Renderer reads `RibbonState.samples` (`[Float]`) and copies to triple-buffered `MTLBuffer`s each frame in `generateTraceVertices()` | updated to reflect triple-buffered copy |
-| "`@Query` observers in the detail view" | `EventDetailView` uses `@State + FetchDescriptor` in `onAppear`, not `@Query` | "fetches the updated record on appearance via `FetchDescriptor`" |
+| Error | Evidence | Fixed to |
+|-------|----------|----------|
+| "The `EventCoordinator` actor bridges…" | `EventCoordinator` is `@MainActor final class` (`EventCoordinator.swift:10`), not a Swift `actor` type | "The `EventCoordinator` (`@MainActor` class) bridges…" |
+| "exponential backoff retries" | `correlate()` sleeps for a fixed `Task.sleep(for: .seconds(120))` on every retry; no exponential growth (`EventCoordinator.swift:124`) | "fixed 120-second retry intervals (up to 3 attempts)" |
+
+**What changed in `README.md`:**  
+Architecture paragraph, one sentence:  
+> before: `…The \`EventCoordinator\` actor bridges these streams to the main actor…USGS correlation happens in a background \`Task\` with exponential backoff retries…`  
+> after:  `…The \`EventCoordinator\` (\`@MainActor\` class) bridges these streams to the main actor…USGS correlation happens in a background \`Task\` with fixed 120-second retry intervals (up to 3 attempts)…`
 
 ---
 
 ## Contradictions for Manual Review
 
 The following files contain drift but are outside the editable doc set. A human should apply the
-one-line fix listed for each.
+fix listed for each.
 
 ### `IMPLEMENTATION-ROADMAP.md`
 
 | Location | Problem | Suggested fix |
 |----------|---------|---------------|
-| Phase 0–3 verification checklists (all `- [ ]` unchecked) | All checklist items are complete per code, but boxes were never checked | Check all boxes, or note "Phases 0–3 complete" at the top of each section |
-| File structure entry: `Seismoscope/Metal/RibbonState.swift` | File lives at `Seismoscope/Models/RibbonState.swift` | Update path in file structure table |
-| File structure entry: `Seismoscope/DSP/StabilityDetector.swift` | No separate `StabilityDetector.swift` exists; stability detection is implemented inline as `PipelineState.updateStability()` in `AccelerometerPipeline.swift` | Remove entry or note "implemented inline in AccelerometerPipeline.swift" |
-| File structure entry: `SeismoscopeKit/Sources/SeismoscopeKit/SeismicClassifier.swift` | File does not exist; `SeismicClassifier` was never implemented — the `STALTADetector`'s `rearmRatio` hysteresis covers the same role | Remove entry or mark "(deferred — not implemented in v1)" |
-| `SeismoscopeTests/USGSCorrelatorTests.swift` | File does not exist; the test target contains only `SeismoscopeTests.swift` (2 `RibbonState` tests) — no `USGSCorrelator` unit tests | Update to reflect actual test file name, or note USGSCorrelator tests are missing |
+| Phase 0–3 verification checklists (all `- [ ]` unchecked) | All phases complete per code, but boxes were never checked | Check all boxes or add a "Phases 0–3 complete" note at the top |
+| File structure: `Seismoscope/Metal/RibbonState.swift` | `RibbonState.swift` lives at `Seismoscope/Models/RibbonState.swift` | Update path |
+| File structure: `Seismoscope/DSP/StabilityDetector.swift` | No separate file exists; stability detection is `PipelineState.updateStability()` in `AccelerometerPipeline.swift` | Remove entry or note "implemented inline in AccelerometerPipeline.swift" |
+| File structure: `SeismoscopeKit/Sources/SeismoscopeKit/SeismicClassifier.swift` | File does not exist; the `STALTADetector` `rearmRatio` hysteresis covers the same role | Remove entry or mark "(deferred — not implemented in v1)" |
 | Dependencies comment: "Xcode 15.2+ required (Swift 5.9…)" | Project uses `SWIFT_VERSION = 6`; requires Xcode 16+ | Change to "Xcode 16+ required (Swift 6.0, strict concurrency)" |
+
+**Correction to prior pass:** The 2026-05-30 reconciliation incorrectly listed
+`SeismoscopeTests/USGSCorrelatorTests.swift` as missing. The file exists and was added in
+`d4204df` (feat(phase2)) — well before that pass. The IMPLEMENTATION-ROADMAP file structure entry
+for `USGSCorrelatorTests.swift` is therefore **accurate**; no fix is needed there.
 
 ---
 
 ## Footer
 
-**Generated:** 2026-05-30 22:51:24 PDT  
-**Branch:** docs/truth-up-2026-05-30  
-**HEAD reconciled against:** 4cf548571571f4ab77a89ad3782054feffefcddd
+**Generated:** 2026-06-02 19:53:49 PDT  
+**Branch:** docs/truth-up-2026-06-02  
+**HEAD reconciled against:** 433c8a2bcdd22e8096ee6e842b8feabdcbe53bb0
