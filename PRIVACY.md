@@ -7,4 +7,4 @@ All processing happens locally on your iPhone.
 No analytics, no tracking, no third-party services.
 
 Last updated: April 2026
-Contact: saagarpatel08@gmail.com
+Contact: https://github.com/saagpatel/Seismoscope/issues
