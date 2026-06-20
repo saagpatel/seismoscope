@@ -1,6 +1,6 @@
 # Seismoscope
 
-[![Swift](https://img.shields.io/badge/Swift-f05138?style=flat-square&logo=swift)](#) [![License](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](#)
+[![Swift](https://img.shields.io/badge/Swift-f05138?style=flat-square&logo=swift)](https://www.swift.org) [![License](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](./LICENSE) [![CI](https://github.com/saagpatel/seismoscope/actions/workflows/ci.yml/badge.svg)](https://github.com/saagpatel/seismoscope/actions/workflows/ci.yml)
 
 > A 1930s seismometer in your pocket — now with earthquake cross-referencing
 
