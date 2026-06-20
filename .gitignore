@@ -14,4 +14,10 @@ build/
 
 # macOS
 .DS_Store
-CLAUDE.md.bak
+
+# Backup files
+*.bak
+
+# Local signing config — contains Team ID and provisioning profile names
+ExportOptions.plist
+fastlane/.env
