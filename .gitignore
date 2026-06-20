@@ -21,3 +21,8 @@ build/
 # Local signing config — contains Team ID and provisioning profile names
 ExportOptions.plist
 fastlane/.env
+
+# App Store Connect private keys — never commit these
+*.p8
+AuthKey_*.p8
+**/private_keys/
