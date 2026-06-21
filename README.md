@@ -1,6 +1,6 @@
 # Seismoscope
 
-[![Swift](https://img.shields.io/badge/Swift-f05138?style=flat-square&logo=swift)](#) [![License](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](#)
+[![Swift](https://img.shields.io/badge/Swift-f05138?style=flat-square&logo=swift)](https://www.swift.org) [![License](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](./LICENSE) [![CI](https://github.com/saagpatel/seismoscope/actions/workflows/ci.yml/badge.svg)](https://github.com/saagpatel/seismoscope/actions/workflows/ci.yml)
 
 > A 1930s seismometer in your pocket — now with earthquake cross-referencing
 
@@ -28,6 +28,14 @@ git clone https://github.com/saagpatel/seismoscope
 cd seismoscope
 open Seismoscope.xcodeproj
 ```
+
+### Code signing
+Signing uses a local, gitignored config so no Team ID is committed. Set it up once:
+```bash
+cp Signing.local.xcconfig.example Signing.local.xcconfig
+# edit Signing.local.xcconfig and set DEVELOPMENT_TEAM to your Apple Developer Team ID
+```
+`Signing.xcconfig` (committed) holds non-secret defaults and optionally includes your local file; the project reads both via XcodeGen `configFiles`.
 
 ### Usage
 Deploy to a physical device. Place the phone on a stable surface and tap **Start Recording**. Detected events appear as annotations on the waveform; tap any to see USGS match details.

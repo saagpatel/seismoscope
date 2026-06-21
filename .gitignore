@@ -14,4 +14,16 @@ build/
 
 # macOS
 .DS_Store
-CLAUDE.md.bak
+
+# Backup files
+*.bak
+
+# Local signing config — contains Team ID and provisioning profile names
+ExportOptions.plist
+fastlane/.env
+Signing.local.xcconfig
+
+# App Store Connect private keys — never commit these
+*.p8
+AuthKey_*.p8
+**/private_keys/

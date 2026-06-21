@@ -1,6 +1,6 @@
 # SeismoscopeKit
 
-A standalone Swift package providing the DSP primitives behind the [Seismoscope](https://github.com/seismoscope) iOS app. Zero external dependencies. iOS 17+, Swift 5.9+.
+A standalone Swift package providing the DSP primitives behind the [Seismoscope](https://github.com/saagpatel/seismoscope) iOS app. Zero external dependencies. iOS 17+, Swift 5.9+.
 
 ---
 
@@ -19,10 +19,13 @@ A standalone Swift package providing the DSP primitives behind the [Seismoscope]
 
 ## Installation
 
-```swift
-// Package.swift
-.package(url: "https://github.com/seismoscope/seismoscope-kit", from: "0.1.0")
-```
+SeismoscopeKit is a local Swift package embedded in the main repo. To add it to another project in Xcode:
+
+1. Open your project in Xcode.
+2. Go to **File → Add Package Dependencies…**
+3. Click **Add Local…** and select the `SeismoscopeKit/` directory from a clone of [saagpatel/seismoscope](https://github.com/saagpatel/seismoscope).
+
+If you need SeismoscopeKit as a standalone remote package, open an issue on the main repo.
 
 ---
 
