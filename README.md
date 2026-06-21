@@ -29,6 +29,14 @@ cd seismoscope
 open Seismoscope.xcodeproj
 ```
 
+### Code signing
+Signing uses a local, gitignored config so no Team ID is committed. Set it up once:
+```bash
+cp Signing.local.xcconfig.example Signing.local.xcconfig
+# edit Signing.local.xcconfig and set DEVELOPMENT_TEAM to your Apple Developer Team ID
+```
+`Signing.xcconfig` (committed) holds non-secret defaults and optionally includes your local file; the project reads both via XcodeGen `configFiles`.
+
 ### Usage
 Deploy to a physical device. Place the phone on a stable surface and tap **Start Recording**. Detected events appear as annotations on the waveform; tap any to see USGS match details.
 

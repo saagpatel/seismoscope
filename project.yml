@@ -30,13 +30,12 @@ targets:
       - package: SeismoscopeKit
       - sdk: Metal.framework
       - sdk: MetalKit.framework
+    configFiles:
+      Debug: Signing.xcconfig
+      Release: Signing.xcconfig
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.seismoscope.app
-        DEVELOPMENT_TEAM: 3TGZFKFNA4
-        CODE_SIGN_STYLE: Manual
-        CODE_SIGN_IDENTITY: "Apple Distribution: SAAGAR I PATEL (3TGZFKFNA4)"
-        PROVISIONING_PROFILE_SPECIFIER: Seismoscope App Store
         MARKETING_VERSION: "1.0"
         CURRENT_PROJECT_VERSION: "1"
         GENERATE_INFOPLIST_FILE: true
