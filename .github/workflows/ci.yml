@@ -13,4 +13,5 @@ jobs:
           xcodebuild build \
             -scheme Seismoscope \
             -project Seismoscope.xcodeproj \
-            -destination 'generic/platform=iOS'
+            -destination 'generic/platform=iOS' \
+            CODE_SIGNING_ALLOWED=NO
