@@ -1,0 +1,4 @@
+# Canonical local verification. Override SIMULATOR when iPhone 17 is unavailable.
+# Live accelerometer behavior remains NOT RUN unless exercised on a physical device.
+make test
+make build

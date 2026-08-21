@@ -4,6 +4,15 @@ import Foundation
 /// Matches a detected `SeismicEvent` against USGS catalog features.
 enum USGSCorrelator {
 
+    static func validatedEventURL(_ value: String?) -> URL? {
+        guard let value, let url = URL(string: value),
+              url.scheme?.lowercased() == "https",
+              url.host?.lowercased() == "earthquake.usgs.gov" else {
+            return nil
+        }
+        return url
+    }
+
     // MARK: - Public API
 
     /// Returns the best-matching USGS feature, or nil if none qualify.
@@ -25,7 +34,9 @@ enum USGSCorrelator {
             .filter { feature in
                 guard let mag = feature.properties.mag, mag >= 1.5 else { return false }
 
-                let timeDeltaMs = abs(feature.properties.time - onsetMs)
+                guard let timeDeltaMs = timeDeltaMs(feature.properties.time, onsetMs) else {
+                    return false
+                }
                 guard timeDeltaMs < 600_000 else { return false }   // 10 minutes
 
                 let coords = feature.geometry.coordinates
@@ -40,8 +51,15 @@ enum USGSCorrelator {
                 return distKm < 500
             }
             .min { a, b in
-                abs(a.properties.time - onsetMs) < abs(b.properties.time - onsetMs)
+                (timeDeltaMs(a.properties.time, onsetMs) ?? .max)
+                    < (timeDeltaMs(b.properties.time, onsetMs) ?? .max)
             }
+    }
+
+    private static func timeDeltaMs(_ lhs: Int64, _ rhs: Int64) -> UInt64? {
+        let (delta, overflow) = lhs.subtractingReportingOverflow(rhs)
+        guard !overflow else { return nil }
+        return delta.magnitude
     }
 
     // MARK: - Geometry

@@ -98,4 +98,28 @@ struct USGSCorrelatorTests {
         let zero = USGSCorrelator.haversineKm(lat1: 37.0, lon1: -122.0, lat2: 37.0, lon2: -122.0)
         #expect(zero < 0.001)
     }
+
+    @Test("extreme timestamps are rejected without overflow")
+    func testExtremeTimestamps() {
+        let onsetDate = Date(timeIntervalSince1970: 1_705_320_000)
+        let event = makeEvent(onsetTime: onsetDate)
+        for time in [Int64.min, Int64.max] {
+            let feature = USGSFeature(
+                id: "extreme",
+                properties: USGSProperties(mag: 4, place: "Test", time: time, url: nil),
+                geometry: USGSGeometry(coordinates: [-121.0, 37.44, 10])
+            )
+            #expect(USGSCorrelator.bestMatch(in: [feature], for: event, near: region) == nil)
+        }
+    }
+
+    @Test("only canonical HTTPS USGS event URLs are accepted")
+    func testEventURLValidation() {
+        #expect(USGSCorrelator.validatedEventURL(
+            "https://earthquake.usgs.gov/earthquakes/eventpage/test"
+        ) != nil)
+        #expect(USGSCorrelator.validatedEventURL("http://earthquake.usgs.gov/test") == nil)
+        #expect(USGSCorrelator.validatedEventURL("https://example.com/test") == nil)
+        #expect(USGSCorrelator.validatedEventURL("tel:+15551212") == nil)
+    }
 }

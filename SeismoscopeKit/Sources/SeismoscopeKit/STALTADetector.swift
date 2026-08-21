@@ -20,6 +20,11 @@ public struct STALTADetector: Sendable {
             threshold: Float = 4.0,
             rearmRatio: Float = 1.5
         ) {
+            precondition(staWindow > 0, "STA window must be positive")
+            precondition(ltaWindow >= staWindow, "LTA window must be at least the STA window")
+            precondition(threshold.isFinite && threshold > 0, "Threshold must be finite and positive")
+            precondition(rearmRatio.isFinite && rearmRatio >= 0 && rearmRatio < threshold,
+                         "Rearm ratio must be finite, non-negative, and below the threshold")
             self.staWindow = staWindow
             self.ltaWindow = ltaWindow
             self.threshold = threshold
@@ -128,6 +133,7 @@ public struct STALTADetector: Sendable {
 
     /// Update the trigger threshold mid-session without resetting filter state.
     public mutating func updateThreshold(_ threshold: Float) {
+        guard threshold.isFinite, threshold > config.rearmRatio else { return }
         config.threshold = threshold
     }
 
@@ -151,7 +157,7 @@ public struct STALTADetector: Sendable {
 
         // historyHead points to the next write slot, so the oldest kept sample
         // in the ring is at historyHead (when the ring is full).
-        let startIndex = historyHead // oldest sample slot
+        let startIndex = sampleCount < historyCapacity ? 0 : historyHead
         for i in 0..<count {
             let index = (startIndex + i) % historyCapacity
             result.append(magnitudeHistory[index])

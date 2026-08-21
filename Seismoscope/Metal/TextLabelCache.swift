@@ -9,12 +9,14 @@ final class TextLabelCache {
     private let device: MTLDevice
     private var cache: [(key: String, texture: MTLTexture)] = []
     private let maxEntries = 20
+    private let maxLabelCharacters = 120
 
     init(device: MTLDevice) {
         self.device = device
     }
 
     func texture(for label: String) -> MTLTexture? {
+        let label = String(label.prefix(maxLabelCharacters))
         // Check cache (LRU: move to end on access)
         if let index = cache.firstIndex(where: { $0.key == label }) {
             let entry = cache.remove(at: index)

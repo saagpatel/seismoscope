@@ -6,8 +6,17 @@ import SeismoscopeKit
 /// Manages the CMMotionManager → filter chain → STA/LTA pipeline.
 /// Runs on a dedicated background DispatchQueue. Publishes via AsyncStream.
 final class AccelerometerPipeline: @unchecked Sendable {
+    static func detectorConfiguration(sampleRate: Double, threshold: Float) -> STALTADetector.Configuration {
+        .init(
+            staWindow: Int(sampleRate * 1.5),
+            ltaWindow: Int(sampleRate * 45),
+            threshold: threshold,
+            rearmRatio: 1.5
+        )
+    }
+
     private let motionManager: CMMotionManager
-    private let queue = DispatchQueue(label: "com.seismoscope.pipeline", qos: .userInteractive)
+    private let operationQueue: OperationQueue
     private let state: PipelineState
 
     let sampleStream: AsyncStream<AccelerometerSample>
@@ -21,10 +30,16 @@ final class AccelerometerPipeline: @unchecked Sendable {
     // Thread-safe mailbox for threshold updates from the main actor.
     // The pipeline callback drains it at the top of each sample cycle.
     private let pendingThreshold = OSAllocatedUnfairLock<Float?>(initialState: nil)
+    private let currentThreshold = OSAllocatedUnfairLock<Float>(initialState: 4)
+    private let sampleInterval = OSAllocatedUnfairLock<TimeInterval>(initialState: 0.01)
 
     init() {
         self.motionManager = CMMotionManager()
-        self.state = PipelineState()
+        self.operationQueue = OperationQueue()
+        self.operationQueue.name = "com.seismoscope.pipeline"
+        self.operationQueue.qualityOfService = .userInteractive
+        self.operationQueue.maxConcurrentOperationCount = 1
+        self.state = PipelineState(sampleRate: 100)
 
         let (sampleStream, sampleContinuation) = AsyncStream<AccelerometerSample>
             .makeStream(bufferingPolicy: .bufferingNewest(200))
@@ -42,8 +57,8 @@ final class AccelerometerPipeline: @unchecked Sendable {
     }
 
     func start() {
-        motionManager.accelerometerUpdateInterval = 0.01 // 100Hz
-        motionManager.startAccelerometerUpdates(to: OperationQueue()) { [weak self] data, error in
+        motionManager.accelerometerUpdateInterval = sampleInterval.withLock { $0 }
+        motionManager.startAccelerometerUpdates(to: operationQueue) { [weak self] data, error in
             guard let self, let data, error == nil else { return }
             self.processSample(data)
         }
@@ -59,12 +74,20 @@ final class AccelerometerPipeline: @unchecked Sendable {
     /// Updates the STA/LTA trigger threshold without restarting the pipeline.
     /// Safe to call from any thread; the update is applied before the next sample is processed.
     func updateThreshold(_ threshold: Float) {
+        currentThreshold.withLock { $0 = threshold }
         pendingThreshold.withLock { $0 = threshold }
     }
 
     /// Switches between full-power (100Hz) and low-power (50Hz) accelerometer sampling.
     func setLowPowerMode(_ enabled: Bool) {
-        motionManager.accelerometerUpdateInterval = enabled ? 0.02 : 0.01
+        let interval = enabled ? 0.02 : 0.01
+        let sampleRate: Double = enabled ? 50 : 100
+        sampleInterval.withLock { $0 = interval }
+        motionManager.accelerometerUpdateInterval = interval
+        operationQueue.addOperation { [state] in
+            let threshold = self.currentThreshold.withLock { $0 }
+            state.reconfigure(sampleRate: sampleRate, threshold: threshold)
+        }
     }
 
     private func processSample(_ data: CMAccelerometerData) {
@@ -92,21 +115,56 @@ final class AccelerometerPipeline: @unchecked Sendable {
 
 private final class PipelineState: @unchecked Sendable {
     // Per-axis filter chains
-    private var hpX = HighPassFilter(cutoffHz: 0.05, sampleRate: 100)
-    private var hpY = HighPassFilter(cutoffHz: 0.05, sampleRate: 100)
-    private var hpZ = HighPassFilter(cutoffHz: 0.05, sampleRate: 100)
-    private var bpX = BandpassFilter(lowCutoffHz: 0.1, highCutoffHz: 10, sampleRate: 100)
-    private var bpY = BandpassFilter(lowCutoffHz: 0.1, highCutoffHz: 10, sampleRate: 100)
-    private var bpZ = BandpassFilter(lowCutoffHz: 0.1, highCutoffHz: 10, sampleRate: 100)
+    private var hpX: HighPassFilter
+    private var hpY: HighPassFilter
+    private var hpZ: HighPassFilter
+    private var bpX: BandpassFilter
+    private var bpY: BandpassFilter
+    private var bpZ: BandpassFilter
 
     // STA/LTA detector
-    private var detector = STALTADetector()
+    private var detector: STALTADetector
 
     // Stability detection (inline)
-    private var stabilityRmsBuffer = [Float](repeating: 0, count: 200)
+    private var stabilityRmsBuffer: [Float]
     private var stabilityHead = 0
     private var stableCount = 0
     private var lastStableState = false
+    private var stableSampleThreshold: Int
+
+    init(sampleRate: Double) {
+        hpX = HighPassFilter(cutoffHz: 0.05, sampleRate: sampleRate)
+        hpY = HighPassFilter(cutoffHz: 0.05, sampleRate: sampleRate)
+        hpZ = HighPassFilter(cutoffHz: 0.05, sampleRate: sampleRate)
+        bpX = BandpassFilter(lowCutoffHz: 0.1, highCutoffHz: 10, sampleRate: sampleRate)
+        bpY = BandpassFilter(lowCutoffHz: 0.1, highCutoffHz: 10, sampleRate: sampleRate)
+        bpZ = BandpassFilter(lowCutoffHz: 0.1, highCutoffHz: 10, sampleRate: sampleRate)
+        detector = Self.makeDetector(sampleRate: sampleRate, threshold: 4)
+        stabilityRmsBuffer = [Float](repeating: 0, count: Int(sampleRate * 2))
+        stableSampleThreshold = Int(sampleRate * 3)
+    }
+
+    func reconfigure(sampleRate: Double, threshold: Float) {
+        hpX = HighPassFilter(cutoffHz: 0.05, sampleRate: sampleRate)
+        hpY = HighPassFilter(cutoffHz: 0.05, sampleRate: sampleRate)
+        hpZ = HighPassFilter(cutoffHz: 0.05, sampleRate: sampleRate)
+        bpX = BandpassFilter(lowCutoffHz: 0.1, highCutoffHz: 10, sampleRate: sampleRate)
+        bpY = BandpassFilter(lowCutoffHz: 0.1, highCutoffHz: 10, sampleRate: sampleRate)
+        bpZ = BandpassFilter(lowCutoffHz: 0.1, highCutoffHz: 10, sampleRate: sampleRate)
+        detector = Self.makeDetector(sampleRate: sampleRate, threshold: threshold)
+        stabilityRmsBuffer = [Float](repeating: 0, count: Int(sampleRate * 2))
+        stabilityHead = 0
+        stableCount = 0
+        lastStableState = false
+        stableSampleThreshold = Int(sampleRate * 3)
+    }
+
+    private static func makeDetector(sampleRate: Double, threshold: Float) -> STALTADetector {
+        STALTADetector(configuration: AccelerometerPipeline.detectorConfiguration(
+            sampleRate: sampleRate,
+            threshold: threshold
+        ))
+    }
 
     func process(
         rawX: Float, rawY: Float, rawZ: Float,
@@ -157,19 +215,19 @@ private final class PipelineState: @unchecked Sendable {
     ) {
         // Store squared value for RMS computation
         stabilityRmsBuffer[stabilityHead] = hpZOut * hpZOut
-        stabilityHead = (stabilityHead + 1) % 200
+        stabilityHead = (stabilityHead + 1) % stabilityRmsBuffer.count
 
         // RMS over 200-sample (2-second) window
-        let rmsSquared = stabilityRmsBuffer.reduce(0, +) / 200.0
+        let rmsSquared = stabilityRmsBuffer.reduce(0, +) / Float(stabilityRmsBuffer.count)
         let rms = sqrt(rmsSquared)
 
-        let wasStable = stableCount >= 300
+        let wasStable = stableCount >= stableSampleThreshold
         if rms > 0.005 {
             stableCount = 0
         } else {
-            stableCount = min(stableCount + 1, 301)
+            stableCount = min(stableCount + 1, stableSampleThreshold + 1)
         }
-        let isStable = stableCount >= 300
+        let isStable = stableCount >= stableSampleThreshold
 
         // Only emit on state change
         if isStable != wasStable {
