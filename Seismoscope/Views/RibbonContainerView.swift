@@ -22,6 +22,7 @@ struct RibbonContainerView: UIViewRepresentable {
 
         let view = MetalRibbonView(frame: .zero, device: device)
         view.delegate = renderer
+        updateAccessibility(for: view, context: context)
 
         // Tap gesture to detect annotation touches
         let tap = UITapGestureRecognizer(
@@ -38,8 +39,24 @@ struct RibbonContainerView: UIViewRepresentable {
     func updateUIView(_ uiView: MetalRibbonView, context: Context) {
         context.coordinator.onEventTapped = onEventTapped
         context.coordinator.ribbonState = ribbonState
-        // RibbonState is @Observable — renderer polls it each frame.
-        // No SwiftUI-driven updates needed.
+        updateAccessibility(for: uiView, context: context)
+    }
+
+    private func updateAccessibility(for view: MetalRibbonView, context: Context) {
+        view.isAccessibilityElement = true
+        view.accessibilityLabel = "Live seismogram"
+        let eventCount = ribbonState.activeEvents.count
+        view.accessibilityValue = eventCount == 1 ? "1 detected event" : "\(eventCount) detected events"
+        view.accessibilityHint = eventCount == 0
+            ? "The waveform updates continuously."
+            : "Use the available actions to open an event."
+        view.accessibilityCustomActions = ribbonState.activeEvents.suffix(20).reversed().map { event in
+            let label = String(event.label.prefix(120))
+            return UIAccessibilityCustomAction(name: "Open \(label)") { [weak coordinator = context.coordinator] _ in
+                coordinator?.onEventTapped?(event.id)
+                return coordinator?.onEventTapped != nil
+            }
+        }
     }
 
     @MainActor final class Coordinator {

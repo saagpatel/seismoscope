@@ -11,6 +11,7 @@ struct StatusBarView: View {
                 Circle()
                     .fill(ribbonState.isStable ? Color.green : Color.orange)
                     .frame(width: 8, height: 8)
+                    .accessibilityHidden(true)
 
                 Text(ribbonState.isStable ? "Stable" : "Place on stable surface")
                     .font(.system(.caption2, design: .monospaced))
@@ -24,7 +25,7 @@ struct StatusBarView: View {
                     .foregroundStyle(.primary)
 
                 // Settings button
-                Button {
+            Button {
                     onSettingsTapped()
                 } label: {
                     Image(systemName: "gearshape")
@@ -32,6 +33,7 @@ struct StatusBarView: View {
                         .foregroundStyle(.secondary)
                 }
                 .buttonStyle(.plain)
+                .accessibilityLabel("Settings")
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 8)

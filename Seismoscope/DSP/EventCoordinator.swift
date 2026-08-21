@@ -17,6 +17,9 @@ final class EventCoordinator {
     private var sampleTask: Task<Void, Never>?
     private var triggerTask: Task<Void, Never>?
     private var stabilityTask: Task<Void, Never>?
+    private var correlationTasks: [UUID: Task<Void, Never>] = [:]
+    private let maxConcurrentCorrelations = 4
+    private let maxStoredEvents = 1_000
 
     init(
         pipeline: AccelerometerPipeline,
@@ -62,6 +65,8 @@ final class EventCoordinator {
         sampleTask?.cancel()
         triggerTask?.cancel()
         stabilityTask?.cancel()
+        correlationTasks.values.forEach { $0.cancel() }
+        correlationTasks.removeAll()
         pipeline.stop()
     }
 
@@ -84,26 +89,39 @@ final class EventCoordinator {
             staLtaRatio: trigger.staLtaRatio
         )
         modelContext.insert(seismicEvent)
+        pruneStoredEventsIfNeeded()
 
         // Add a RibbonEvent (same UUID cross-references the SeismicEvent)
         let ribbonEvent = RibbonEvent(
             id: eventId,
-            sampleIndex: ribbonState.samples.count,
+            sampleIndex: max(0, ribbonState.samples.count - 1),
             label: "Local vibration",
             isConfirmed: false,
             tintColor: SIMD4<Float>(0.5, 0.5, 0.5, 1)
         )
-        ribbonState.activeEvents.append(ribbonEvent)
+        ribbonState.appendEvent(ribbonEvent)
 
         // Fire USGS correlation asynchronously
-        Task { [weak self] in
-            await self?.correlate(seismicEvent: seismicEvent, ribbonEventId: eventId)
+        guard correlationTasks.count < maxConcurrentCorrelations else {
+            seismicEvent.correlationStatus = "timeout"
+            try? modelContext.save()
+            return
+        }
+        let queryRegion = region
+        correlationTasks[eventId] = Task { [weak self] in
+            guard let self else { return }
+            await correlate(seismicEvent: seismicEvent, ribbonEventId: eventId, region: queryRegion)
+            correlationTasks[eventId] = nil
         }
     }
 
     // MARK: - USGS Correlation
 
-    private func correlate(seismicEvent: SeismicEvent, ribbonEventId: UUID) async {
+    private func correlate(
+        seismicEvent: SeismicEvent,
+        ribbonEventId: UUID,
+        region: RegionPreset
+    ) async {
         do {
             let features = try await usgsClient.queryEvents(near: region, around: seismicEvent.onsetTime)
             if let match = USGSCorrelator.bestMatch(in: features, for: seismicEvent, near: region) {
@@ -123,7 +141,7 @@ final class EventCoordinator {
 
             try? await Task.sleep(for: .seconds(120))
             guard !Task.isCancelled else { return }
-            await correlate(seismicEvent: seismicEvent, ribbonEventId: ribbonEventId)
+            await correlate(seismicEvent: seismicEvent, ribbonEventId: ribbonEventId, region: region)
         } else {
             // Exhausted retries — mark as timeout
             seismicEvent.correlationStatus = "timeout"
@@ -147,7 +165,7 @@ final class EventCoordinator {
             lat2: featureLat, lon2: featureLon
         ))
         event.usgsOriginTime = Date(timeIntervalSince1970: Double(feature.properties.time) / 1000.0)
-        event.usgsEventURL = feature.properties.url
+        event.usgsEventURL = USGSCorrelator.validatedEventURL(feature.properties.url)?.absoluteString
         try? modelContext.save()
 
         // Update the corresponding RibbonEvent label and tint
@@ -158,5 +176,16 @@ final class EventCoordinator {
             ribbonState.activeEvents[index].isConfirmed = true
             ribbonState.activeEvents[index].tintColor = SIMD4<Float>(0.9, 0.2, 0.1, 1)
         }
+    }
+
+    private func pruneStoredEventsIfNeeded() {
+        var descriptor = FetchDescriptor<SeismicEvent>(
+            sortBy: [SortDescriptor(\.onsetTime, order: .reverse)]
+        )
+        descriptor.fetchOffset = maxStoredEvents
+        descriptor.fetchLimit = 100
+        guard let expiredEvents = try? modelContext.fetch(descriptor) else { return }
+        expiredEvents.forEach(modelContext.delete)
+        if !expiredEvents.isEmpty { try? modelContext.save() }
     }
 }

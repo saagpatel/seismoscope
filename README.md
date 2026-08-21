@@ -40,6 +40,21 @@ cp Signing.local.xcconfig.example Signing.local.xcconfig
 ### Usage
 Deploy to a physical device. Place the phone on a stable surface and tap **Start Recording**. Detected events appear as annotations on the waveform; tap any to see USGS match details.
 
+## Verification
+
+Run the canonical local checks from the repository root:
+
+```bash
+make test   # Swift package tests plus iOS app tests on an iPhone 17 simulator
+make build  # unsigned generic iOS build
+```
+
+Set `SIMULATOR=<available iPhone simulator name>` when `iPhone 17` is not
+installed locally. These checks cover the signal-processing package, app unit
+tests, and build validity. They do not exercise live accelerometer input,
+calibration, or physical-device rendering; report that behavior as `NOT RUN`
+unless it was exercised on an iOS device.
+
 ## Tech Stack
 
 | Layer | Technology |

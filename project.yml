@@ -31,8 +31,8 @@ targets:
       - sdk: Metal.framework
       - sdk: MetalKit.framework
     configFiles:
-      Debug: Signing.xcconfig
-      Release: Signing.xcconfig
+      Debug: Signing.Debug.xcconfig
+      Release: Signing.Release.xcconfig
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.seismoscope.app

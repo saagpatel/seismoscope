@@ -101,7 +101,7 @@ struct EventDetailView: View {
             if let originTime = event.usgsOriginTime {
                 detailRow("Origin Time", value: originTime.formatted(date: .omitted, time: .standard))
             }
-            if let urlString = event.usgsEventURL, let url = URL(string: urlString) {
+            if let url = USGSCorrelator.validatedEventURL(event.usgsEventURL) {
                 Link(destination: url) {
                     Label("View on USGS", systemImage: "arrow.up.right.square")
                 }

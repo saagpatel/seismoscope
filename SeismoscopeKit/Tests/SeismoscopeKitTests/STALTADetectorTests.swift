@@ -104,4 +104,26 @@ struct STALTADetectorTests {
         #expect(triggers.isEmpty)
         #expect(detector.currentRatio == 0)
     }
+
+    @Test func partialHistoryIsChronological() {
+        var detector = STALTADetector(configuration: .init(
+            staWindow: 2, ltaWindow: 4, threshold: 1.5, rearmRatio: 0.5
+        ))
+        for index in 1...4 {
+            _ = detector.process(magnitude: 1, timestamp: Double(index), dominantAxis: "z")
+        }
+        let event = detector.process(magnitude: 10, timestamp: 5, dominantAxis: "z")
+        #expect(event?.windowSamples == [1, 1, 1, 1, 10])
+    }
+
+    @Test func invalidThresholdUpdateIsIgnored() {
+        var detector = STALTADetector(configuration: .init(
+            staWindow: 2, ltaWindow: 4, threshold: 4, rearmRatio: 1
+        ))
+        detector.updateThreshold(.nan)
+        for index in 0..<4 {
+            _ = detector.process(magnitude: 1, timestamp: Double(index), dominantAxis: "z")
+        }
+        #expect(detector.process(magnitude: 2, timestamp: 4, dominantAxis: "z") == nil)
+    }
 }
