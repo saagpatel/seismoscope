@@ -94,9 +94,20 @@ struct SeismoscopeApp: App {
         guard syntheticSource == nil else { return }
         if let shot = AppStoreScreenshot.requested {
             let source = SyntheticDataSource(ribbonState: ribbonState)
-            source.prepareScreenshot(shot)
+            if let event = source.prepareScreenshot(shot) {
+                let context = modelContainer.mainContext
+                context.insert(event)
+                do {
+                    try context.save()
+                } catch {
+                    fatalError("Failed to save screenshot fixture: \(error)")
+                }
+                if shot == .eventDetail {
+                    selectedEvent = SelectedEvent(id: event.id)
+                }
+            }
             syntheticSource = source
-            showSettings = shot == .settingsRegion || shot == .settingsControls
+            showSettings = shot == .settingsControls
             return
         }
         #endif
