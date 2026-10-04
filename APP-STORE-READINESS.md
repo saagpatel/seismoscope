@@ -1,10 +1,10 @@
 # Seismoscope App Store readiness — 2026-10-04
 
 **Partial: upload readiness is not established.** Configuration fixes are ready
-for review, but unit tests and the unsigned Release build failed to execute in
-this environment. Metadata has unresolved App Review guideline 2.3 risks.
+for review, but unit tests and the unsigned Release build have not run: this
+machine currently has no full Xcode install. Metadata has unresolved App Review guideline 2.3 risks.
 No signing, archive, export, upload, Keychain access, or store/developer API calls
-were performed. No commits were made; the dispatcher owns committing after review.
+were performed. Changes were committed by the dispatcher after review; build and unit tests still need a full Xcode install.
 
 Store facts below were supplied from the existing record on 2026-10-04, not
 queried by this worker. Repository-root `AGENTS.md` is absent; the supplied
