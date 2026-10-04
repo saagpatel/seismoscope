@@ -40,7 +40,8 @@ final class EventCoordinator {
             guard let self else { return }
             for await sample in pipeline.sampleStream {
                 guard !Task.isCancelled else { break }
-                ribbonState.appendSample(sample.magnitude)
+                // Retain magnitude for the readout; draw the signed, bandpassed vertical axis.
+                ribbonState.appendSample(sample.magnitude, signedValue: sample.z, timestamp: sample.timestamp)
             }
         }
 

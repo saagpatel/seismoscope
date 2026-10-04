@@ -11,7 +11,7 @@ struct TraceVertex {
 
 struct RibbonUniforms {
     float       scrollOffset;    // cumulative pixels scrolled
-    float       scrollRate;      // pixels per second (1.0)
+    float       scrollRate;      // pixels per second (4 points/sec × content scale)
     simd_float2 viewportSize;    // in pixels
     float       traceYCenter;    // normalized Y center of trace (0.5)
     float       time;            // elapsed seconds since start
