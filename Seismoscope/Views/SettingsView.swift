@@ -74,7 +74,7 @@ struct SettingsView: View {
         } header: {
             Text("Region")
         } footer: {
-            Text("Determines the area searched when correlating with USGS earthquake data.")
+            Text("Determines the area searched when correlating with USGS earthquake data. The region's coordinates are sent to USGS.")
                 .font(.caption)
         }
     }

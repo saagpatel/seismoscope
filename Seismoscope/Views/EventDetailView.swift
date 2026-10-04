@@ -76,7 +76,7 @@ struct EventDetailView: View {
             Label("No earthquake match found", systemImage: "minus.circle")
                 .foregroundStyle(.secondary)
         case "timeout":
-            Label("No match found (checked \(event.retryCount) times)", systemImage: "clock.badge.xmark")
+            Label(event.retryCount == 0 ? "Not checked (too many events at once)" : "No match found (checked \(event.retryCount + 1) times)", systemImage: "clock.badge.xmark")
                 .foregroundStyle(.secondary)
         default:
             EmptyView()

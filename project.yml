@@ -42,7 +42,7 @@ targets:
         INFOPLIST_KEY_ITSAppUsesNonExemptEncryption: NO
         INFOPLIST_KEY_UIApplicationSceneManifest_Generation: true
         INFOPLIST_KEY_UILaunchScreen_Generation: true
-        INFOPLIST_KEY_NSMotionUsageDescription: "Seismoscope uses your iPhone's accelerometer to detect ground vibrations and display them as a seismogram."
+        INFOPLIST_KEY_NSMotionUsageDescription: "Seismoscope uses your device's accelerometer to draw a seismogram of its motion and compare detected vibrations with the USGS earthquake catalog."
         INFOPLIST_KEY_UISupportedInterfaceOrientations: "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
         INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad: "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
         SWIFT_OBJC_BRIDGING_HEADER: Seismoscope/Support/Seismoscope-Bridging-Header.h

@@ -15,13 +15,13 @@ struct StatusBarView: View {
     private var accelerationText: String {
         useMilliG
             ? String(format: "%.1f mg", ribbonState.currentAcceleration)
-            : "MMI \(intensityNumeral)"
+            : "MMI \(intensityNumeral) (est.)"
     }
 
     private var accelerationAccessibilityLabel: String {
         useMilliG
             ? String(format: "Acceleration %.1f milli-g", ribbonState.currentAcceleration)
-            : "Modified Mercalli intensity \(intensityNumeral)"
+            : "Estimated Modified Mercalli intensity \(intensityNumeral)"
     }
 
     var body: some View {
