@@ -21,6 +21,14 @@ struct SeismoscopeApp: App {
 
     private let modelContainer: ModelContainer = {
         do {
+            #if DEBUG
+            if AppStoreScreenshot.requested != nil {
+                return try ModelContainer(
+                    for: SeismicEvent.self,
+                    configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+                )
+            }
+            #endif
             return try ModelContainer(for: SeismicEvent.self)
         } catch {
             fatalError("Failed to create ModelContainer: \(error)")
@@ -42,7 +50,7 @@ struct SeismoscopeApp: App {
                 }
 
                 #if DEBUG
-                if !isUsingLivePipeline {
+                if !isUsingLivePipeline && AppStoreScreenshot.requested == nil {
                     debugOverlay
                 }
                 #endif
@@ -84,6 +92,13 @@ struct SeismoscopeApp: App {
         guard coordinator == nil else { return }
         #if DEBUG
         guard syntheticSource == nil else { return }
+        if let shot = AppStoreScreenshot.requested {
+            let source = SyntheticDataSource(ribbonState: ribbonState)
+            source.prepareScreenshot(shot)
+            syntheticSource = source
+            showSettings = shot == .settingsRegion || shot == .settingsControls
+            return
+        }
         #endif
 
         if CMMotionManager().isAccelerometerAvailable {
