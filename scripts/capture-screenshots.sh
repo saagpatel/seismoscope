@@ -119,8 +119,15 @@ for device_index in 0 1; do
     output_dir="screenshots/appstore/$slug"
     mkdir -p "$output_dir"
 
+    # Warm launch so the first capture follows this app, clearing cross-app back links.
+    xcrun simctl terminate "$device_id" "$bundle_id" >/dev/null 2>&1 || true
+    xcrun simctl launch "$device_id" "$bundle_id" -AppStoreScreenshot 1 \
+        -AppleLanguages '(en)' -AppleLocale en_US
+    sleep 2
+    xcrun simctl terminate "$device_id" "$bundle_id" >/dev/null 2>&1 || true
+
     for shot in 1 2 3 4; do
-        # simctl terminate also fails when the app is not running (normal on the first shot).
+        # A non-running app is normal after the warm launch or a prior termination.
         xcrun simctl terminate "$device_id" "$bundle_id" >/dev/null 2>&1 || true
         xcrun simctl launch "$device_id" "$bundle_id" -AppStoreScreenshot "$shot" \
             -AppleLanguages '(en)' -AppleLocale en_US
