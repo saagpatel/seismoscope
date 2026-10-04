@@ -40,7 +40,7 @@
             <string>NSPrivacyAccessedAPICategoryUserDefaults</string>
             <key>NSPrivacyAccessedAPITypeReasons</key>
             <array>
-                <string>C56D.1</string>
+                <string>CA92.1</string>
             </array>
         </dict>
 		<dict>
@@ -48,6 +48,7 @@
 			<string>NSPrivacyAccessedAPICategorySystemBootTime</string>
 			<key>NSPrivacyAccessedAPITypeReasons</key>
 			<array>
+				<string>35F9.1</string>
 				<string>8FFB.1</string>
 			</array>
 		</dict>

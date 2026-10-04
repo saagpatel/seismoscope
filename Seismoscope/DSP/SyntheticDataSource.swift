@@ -1,5 +1,6 @@
 import Foundation
 
+#if DEBUG
 /// Generates synthetic waveform data for Phase 0 testing.
 /// Feeds samples into RibbonState at 100Hz.
 @MainActor
@@ -79,3 +80,4 @@ final class SyntheticDataSource {
         }
     }
 }
+#endif

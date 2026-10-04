@@ -130,7 +130,9 @@ final class EventCoordinator {
             }
         } catch {
             // Log but treat as no-match so retry logic proceeds
+            #if DEBUG
             print("[EventCoordinator] USGS query error: \(error.localizedDescription)")
+            #endif
         }
 
         // Schedule retry if attempts remain

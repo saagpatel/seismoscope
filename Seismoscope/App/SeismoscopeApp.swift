@@ -12,7 +12,9 @@ struct SeismoscopeApp: App {
     @State private var appState = AppState()
     @State private var ribbonState = RibbonState()
     @State private var coordinator: EventCoordinator?
+    #if DEBUG
     @State private var syntheticSource: SyntheticDataSource?
+    #endif
     @State private var selectedEvent: SelectedEvent?
     @State private var showSettings = false
     @Environment(\.scenePhase) private var scenePhase
@@ -79,7 +81,10 @@ struct SeismoscopeApp: App {
     }
 
     private func startPipeline() {
-        guard coordinator == nil, syntheticSource == nil else { return }
+        guard coordinator == nil else { return }
+        #if DEBUG
+        guard syntheticSource == nil else { return }
+        #endif
 
         if CMMotionManager().isAccelerometerAvailable {
             let pipeline = AccelerometerPipeline()
@@ -97,18 +102,22 @@ struct SeismoscopeApp: App {
             coord.start()
             coordinator = coord
         } else {
+            #if DEBUG
             // Simulator fallback — use synthetic data
             let source = SyntheticDataSource(ribbonState: ribbonState)
             source.start()
             syntheticSource = source
+            #endif
         }
     }
 
     private func stopPipeline() {
         coordinator?.stop()
         coordinator = nil
+        #if DEBUG
         syntheticSource?.stop()
         syntheticSource = nil
+        #endif
     }
 
     #if DEBUG
