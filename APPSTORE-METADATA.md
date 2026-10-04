@@ -119,69 +119,22 @@ motion and detection review.
 ## App Review Notes
 
 ```text
-Seismoscope displays filtered device motion while the app is in the foreground.
-No account, credentials, or reviewer login are required.
+Seismoscope draws filtered device motion as a seismogram while the app is in the foreground. No account or login is required.
 
-Automatic catalog requests use HTTPS GET at:
-https://earthquake.usgs.gov/fdsnws/event/1/query
-The query fields are format=geojson, starttime, endtime, latitude, longitude,
-maxradiuskm=500, minmagnitude=1.5, orderby=time, and limit=20. Coordinates come
-from San Francisco until you select a city or enter custom coordinates.
-The search window runs from 10 minutes
-before detected onset to 30 minutes after it; matching uses a time difference
-under 10 minutes. Raw accelerometer samples and stored event history are not
-uploaded. View on USGS opens the matched event's USGS web page.
+Network: catalog checks are HTTPS GET requests to https://earthquake.usgs.gov/fdsnws/event/1/query with a region latitude and longitude, a 500 km radius, minimum magnitude 1.5, and a time window around the detection. The region is San Francisco until you pick a city or enter custom coordinates. Raw motion samples and event history are not uploaded. View on USGS opens the matched event's page in the browser.
 
-The app declares NSMotionUsageDescription for accelerometer use. It does not
-request location, camera, microphone, or photo-library access.
+Permissions: Motion only (NSMotionUsageDescription). No location, camera, microphone, or photo access.
 
-On a physical iPhone or iPad:
-1. Launch the app. Sampling starts automatically when an accelerometer is
-   available. There is no Start Recording button.
-2. Tap the gear button (accessibility label: Settings). Under Region, select
-   a city near the area you want to search. Custom Location reveals Lat and
-   Lon fields; enter valid coordinates and tap Apply if using that option.
-   Until you choose a region, catalog requests use the San Francisco preset.
-   The Region footer explains that the coordinates are sent to USGS.
-3. Scroll past the city list to Sensitivity. Threshold has More sensitive and
-   Less sensitive labels. Leave Low-power mode off for this test. Tap Done.
-4. Place the device on a quiet, hard surface and leave the app in the foreground
-   for at least 60 seconds. Detection requires 45 seconds of samples after
-   startup or a sampling-rate change. Stable appears only after the filtered
-   stability signal stays quiet for three seconds; launch-to-Stable time varies.
-5. Gently tap the desk near the device. Motion can appear on the trace without
-   crossing the event threshold. If needed, lower Threshold toward More
-   sensitive and try again after the motion settles.
-6. A detected event initially has a Local vibration annotation. Tap near it to
-   open Event Detail, which shows Detection fields including Onset, Peak,
-   Dominant Axis, and STA/LTA Ratio. It does not show a recorded duration.
-7. If a correlation slot is available, the catalog query starts at detection.
-   Event Detail may show Checking USGS earthquake catalog… when opened.
-   While the annotation is still visible, close the sheet with Done and reopen
-   it to load the latest stored result. A qualifying catalog event shows Earthquake
-   matched and USGS Earthquake Data. View on USGS appears when a valid link is
-   available. A desk tap usually has no catalog match; none is guaranteed for
-   the reviewer's chosen region and time. The Local vibration ribbon label is
-   not a conclusion that catalog checks have finished.
-8. Unmatched checks can retry three times with a two-minute wait each. Network
-   failures or rate limiting can extend the wait. The app checks up to four
-   events concurrently; additional detections skip the query while slots are
-   occupied. Delayed results can outlast the visible annotation; there is no
-   separate history screen for reopening it later. The timeout message counts
-   the initial check plus retries. Events skipped by the cap show Not checked
-   (too many events at once). Keep the app in the
-   foreground; backgrounding cancels checks.
-9. In Settings, turn off Show acceleration in milli-g and tap Done. The status
-   readout changes from mg to an MMI Roman numeral marked (est.), with an
-   Estimated Modified Mercalli intensity VoiceOver label. Turning it on
-   restores mg. Low-power mode lowers requested sampling to 50 Hz; it does
-   not pause rendering and restarts the detector's warmup.
+To review on a physical iPhone or iPad:
+1. Launch the app. Sampling starts automatically.
+2. Tap the gear button (Settings). Under Region, pick a city, or use Custom Location to enter coordinates and tap Apply. Tap Done.
+3. Place the device on a quiet, hard surface and leave the app in the foreground for at least 60 seconds; detection needs 45 seconds of samples after launch.
+4. Tap the desk firmly near the device. If nothing registers, lower Threshold toward More sensitive in Settings and try again.
+5. A detected event shows a Local vibration label on the ribbon. Tap it to open Event Detail (Onset, Peak, Dominant Axis, STA/LTA Ratio).
+6. The app checks the USGS catalog at detection and retries up to three times, two minutes apart, if nothing matches. A desk tap normally has no catalog match. If a real earthquake matches, Event Detail shows Earthquake matched with magnitude, location, depth and distance. Close and reopen the sheet to see the latest result. Keep the app in the foreground; backgrounding cancels pending checks.
+7. In Settings, turn off Show acceleration in milli-g: the readout switches from mg to an estimated Modified Mercalli intensity (for example MMI II (est.)).
 
-On a simulator without an accelerometer, the Release build has no live motion
-input. Settings remain available. Debug-only Sine, Noise, and Impulse controls
-produce samples for display inspection, without detection or catalog checks.
-Use a physical device to review live detection. Matching a catalog event is
-a time-and-region comparison, not scientific validation of the device signal.
+A simulator has no live accelerometer, so please review on a device. A catalog match compares time and region; it does not prove what moved the device.
 ```
 
 ## Checklist Before Submission
