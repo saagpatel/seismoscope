@@ -7,7 +7,7 @@ Store settings below are intended submission values. Confirm them in the existin
 | Field | Value |
 |-------|-------|
 | **Name** | Seismoscope |
-| **Subtitle** | Motion on a paper ribbon |
+| **Subtitle** | A seismograph in your pocket |
 | **Bundle ID** | com.seismoscope.app |
 | **SKU** | SEISMOSCOPE-001 |
 | **Primary Category** | Utilities |
@@ -19,43 +19,42 @@ Store settings below are intended submission values. Confirm them in the existin
 ## Keywords
 
 ```text
-seismometer,earthquake,accelerometer,seismograph,vibration,ground motion,USGS,science,physics
+seismometer,earthquake,accelerometer,vibration,tremor,seismic,quake,USGS,ground,motion
 ```
 
 ## Description
 
-Watch device motion take shape on a paper ribbon. Seismoscope uses your iPhone or iPad's accelerometer to draw a seismogram and compare detected vibrations with the USGS earthquake catalog.
+Watch your phone's movements take shape on a paper ribbon. Seismoscope uses your iPhone or iPad's accelerometer to draw a seismogram and compare detected vibrations with the USGS earthquake catalog.
 
-The display takes its cues from a drum seismograph: parchment texture, a scrolling ink trace, and a blur effect on stronger signals. The trace draws the filtered vertical-axis signal as a signed envelope. Paper, trace, and event annotations share a speed of 4 points per second.
+The display is modeled on a drum seismograph: parchment scrolling steadily under an ink trace, with a bleed effect that spreads on stronger signals. The trace shows filtered motion through the screen, so a quiet table draws a thin line and stronger shaking draws a wider one.
 
 Signal processing:
-• Requests accelerometer samples at 100 Hz
-• Gravity-removal highpass followed by a 0.1-10 Hz Butterworth bandpass with four cascaded second-order sections
-• STA/LTA detection compares short-term and long-term signal levels
-• Automatic re-arm allows separate events to be detected
+• Reads the accelerometer up to 100 times a second
+• Strips gravity, then keeps the 0.1 to 10 Hz band with a Butterworth bandpass
+• STA/LTA triggering: a short running average against a long one, firing when the ratio jumps
+• Re-arms after each event, so one session can capture many
 
 Earthquake catalog checks:
 • Detected events first appear on the ribbon as "Local vibration"
 • A match updates the annotation with magnitude and location when available
-• Matching uses your selected region, a distance under 500 km, an onset-time difference under 10 minutes, and magnitude 1.5 or greater
-• Up to four catalog checks per event: an initial check and three retries, with a two-minute wait before each retry. Rate limiting can add a request and a delay
-• Up to four events can be checked at once. Further detections are stored without a catalog query while those slots are occupied
-• Motion recording runs while the app is in the foreground. Moving it to the background stops sampling and cancels outstanding catalog checks
+• Matching uses the search region, a distance under 500 km, an onset-time difference under 10 minutes, and magnitude 1.5 or greater
 
-Tap an event annotation to open Event Detail. See onset time, peak acceleration, dominant axis, and STA/LTA ratio. Matched events can also show magnitude, location, depth, distance, origin time, and a View on USGS link. A catalog match is a comparison of time and region, rather than proof of what caused the device to move.
+New earthquakes can take a few minutes to reach the catalog, so if the first check finds nothing the app tries three more times, two minutes apart (up to four events at a time). Recording and catalog checks run while the app is in the foreground.
+
+Tap an event annotation to open Event Detail. See onset time, peak acceleration, dominant axis, and STA/LTA ratio. Matched events can also show magnitude, location, depth, distance, origin time, and a View on USGS link. A catalog match compares time and region; it does not prove what moved your device.
 
 Settings:
 • Choose from 50 city presets or enter custom coordinates
 • Adjust the detection threshold with the sensitivity slider
-• Show filtered acceleration in milli-g or an estimated Modified Mercalli Intensity (MMI) in Roman numerals. The estimate applies the Wald et al. (1999) acceleration relations to the live readout
-• Low-power mode requests 50 Hz sampling. The ribbon continues rendering
+• Read the live level in milli-g, or as an estimated Modified Mercalli intensity (I to XII) derived from acceleration using the Wald et al. (1999) relations
+• Low-power mode halves the sampling rate to 50 Hz
 
-No GPS, accounts, or subscriptions. Raw motion samples and stored event history stay on your device. Catalog requests send your selected region coordinates and an event-time search window to USGS. Opening View on USGS visits an event page. No analytics, advertising, or tracking.
+Seismoscope never asks for your location and has no accounts, ads, analytics, or tracking. Catalog checks send region coordinates (San Francisco until you choose a city or enter coordinates) and an event-time window to USGS. Motion data and event history stay on your device. Tapping View on USGS opens the event page in your browser.
 
 ## Promotional Text
 
 ```text
-Watch motion on a vintage paper ribbon. Explore filtered accelerometer signals and compare detected vibrations with the USGS earthquake catalog.
+Set your phone on a desk and watch it draw a seismogram on scrolling parchment. When it detects a jolt, it checks the USGS catalog for a matching earthquake.
 ```
 
 ## Field Lengths
@@ -65,10 +64,10 @@ Python character counts include spaces, punctuation, and description line breaks
 | Field | Characters | Limit |
 |-------|------------|-------|
 | Name | 11 | 30 |
-| Subtitle | 24 | 30 |
-| Promotional text | 144 | 170 |
-| Keywords | 93 | 100 |
-| Description | 2513 | 4000 |
+| Subtitle | 28 | 30 |
+| Promotional text | 157 | 170 |
+| Keywords | 86 | 100 |
+| Description | 2308 | 4000 |
 
 ## Support URL
 
@@ -114,7 +113,8 @@ Automatic catalog requests use HTTPS GET at:
 https://earthquake.usgs.gov/fdsnws/event/1/query
 The query fields are format=geojson, starttime, endtime, latitude, longitude,
 maxradiuskm=500, minmagnitude=1.5, orderby=time, and limit=20. Coordinates come
-from the selected city or custom entry. The search window runs from 10 minutes
+from San Francisco until you select a city or enter custom coordinates.
+The search window runs from 10 minutes
 before detected onset to 30 minutes after it; matching uses a time difference
 under 10 minutes. Raw accelerometer samples and stored event history are not
 uploaded. View on USGS opens the matched event's USGS web page.
@@ -128,6 +128,8 @@ On a physical iPhone or iPad:
 2. Tap the gear button (accessibility label: Settings). Under Region, select
    a city near the area you want to search. Custom Location reveals Lat and
    Lon fields; enter valid coordinates and tap Apply if using that option.
+   Until you choose a region, catalog requests use the San Francisco preset.
+   The Region footer explains that the coordinates are sent to USGS.
 3. Scroll past the city list to Sensitivity. Threshold has More sensitive and
    Less sensitive labels. Leave Low-power mode off for this test. Tap Done.
 4. Place the device on a quiet, hard surface and leave the app in the foreground
@@ -152,11 +154,13 @@ On a physical iPhone or iPad:
    failures or rate limiting can extend the wait. The app checks up to four
    events concurrently; additional detections skip the query while slots are
    occupied. Delayed results can outlast the visible annotation; there is no
-   separate history screen for reopening it later. The timeout message's count
-   is the retry counter and excludes the initial query. Keep the app in the
+   separate history screen for reopening it later. The timeout message counts
+   the initial check plus retries. Events skipped by the cap show Not checked
+   (too many events at once). Keep the app in the
    foreground; backgrounding cancels checks.
 9. In Settings, turn off Show acceleration in milli-g and tap Done. The status
-   readout changes from mg to an estimated MMI Roman numeral. Turning it on
+   readout changes from mg to an MMI Roman numeral marked (est.), with an
+   Estimated Modified Mercalli intensity VoiceOver label. Turning it on
    restores mg. Low-power mode lowers requested sampling to 50 Hz; it does
    not pause rendering and restarts the detector's warmup.
 
@@ -179,7 +183,7 @@ a time-and-region comparison, not scientific validation of the device signal.
 - [ ] Capture and upload eight accurate screenshots: four at 1320 x 2868 for iPhone and four at 2064 x 2752 for iPad; exclude Debug controls
 - [ ] Enter the checked description, promotional text, keywords, and subtitle in App Store Connect
 - [ ] Confirm Free pricing, territories, and age rating questionnaire answers in the store record
-- [ ] Confirm support and privacy URLs are accessible and the policy explains selected coordinates, event-time queries, local motion/history, and USGS page navigation
+- [ ] Confirm support and privacy URLs are accessible and the policy explains region coordinates (San Francisco by default), event-time queries, local motion/history, USGS page navigation, and ordinary network information such as the device IP address
 - [ ] Reconcile App Privacy answers with the manifest's Precise Location and Other Data Types for App Functionality, neither linked to identity nor used for tracking; qualify USGS handling/retention before finalizing answers
 - [ ] On physical iPhone and iPad, verify foreground motion, post-warmup detection, event detail, actual catalog-check outcomes, the mg/MMI switch, and 50 Hz low-power sampling with rendering continuing
 - [ ] In TestFlight, follow the review steps and record detection and catalog outcomes without requiring an earthquake match
