@@ -40,7 +40,8 @@ final class EventCoordinator {
             guard let self else { return }
             for await sample in pipeline.sampleStream {
                 guard !Task.isCancelled else { break }
-                ribbonState.appendSample(sample.magnitude)
+                // Retain magnitude for the readout; draw the signed, bandpassed vertical axis.
+                ribbonState.appendSample(sample.magnitude, signedValue: sample.z, timestamp: sample.timestamp)
             }
         }
 
@@ -130,7 +131,9 @@ final class EventCoordinator {
             }
         } catch {
             // Log but treat as no-match so retry logic proceeds
+            #if DEBUG
             print("[EventCoordinator] USGS query error: \(error.localizedDescription)")
+            #endif
         }
 
         // Schedule retry if attempts remain

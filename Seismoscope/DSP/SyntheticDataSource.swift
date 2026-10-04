@@ -1,5 +1,6 @@
 import Foundation
 
+#if DEBUG
 /// Generates synthetic waveform data for Phase 0 testing.
 /// Feeds samples into RibbonState at 100Hz.
 @MainActor
@@ -41,7 +42,7 @@ final class SyntheticDataSource {
             while !Task.isCancelled {
                 guard let self else { return }
                 let sample = self.generateSample()
-                self.ribbonState?.appendSample(sample)
+                self.ribbonState?.appendSample(abs(sample), signedValue: sample)
                 self.sampleCount += 1
                 try? await Task.sleep(for: .milliseconds(10))
             }
@@ -79,3 +80,4 @@ final class SyntheticDataSource {
         }
     }
 }
+#endif

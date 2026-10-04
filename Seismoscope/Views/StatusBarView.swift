@@ -1,8 +1,28 @@
 import SwiftUI
+import SeismoscopeKit
 
 struct StatusBarView: View {
     let ribbonState: RibbonState
+    let useMilliG: Bool
     let onSettingsTapped: () -> Void
+
+    private var intensityNumeral: String {
+        SeismicIntensity.romanNumeral(SeismicIntensity.modifiedMercalli(
+            peakAccelerationMilliG: Double(ribbonState.currentAcceleration)
+        ))
+    }
+
+    private var accelerationText: String {
+        useMilliG
+            ? String(format: "%.1f mg", ribbonState.currentAcceleration)
+            : "MMI \(intensityNumeral) (est.)"
+    }
+
+    private var accelerationAccessibilityLabel: String {
+        useMilliG
+            ? String(format: "Acceleration %.1f milli-g", ribbonState.currentAcceleration)
+            : "Estimated Modified Mercalli intensity \(intensityNumeral)"
+    }
 
     var body: some View {
         VStack {
@@ -20,9 +40,10 @@ struct StatusBarView: View {
                 Spacer()
 
                 // Live acceleration
-                Text(String(format: "%.1f mg", ribbonState.currentAcceleration))
+                Text(accelerationText)
                     .font(.system(.caption, design: .monospaced).weight(.medium))
                     .foregroundStyle(.primary)
+                    .accessibilityLabel(accelerationAccessibilityLabel)
 
                 // Settings button
             Button {

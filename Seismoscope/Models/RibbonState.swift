@@ -1,10 +1,13 @@
 import Foundation
+import QuartzCore
+import SeismoscopeKit
 import simd
 
 @Observable
 @MainActor
 final class RibbonState {
     var samples: [Float] = []
+    var traceSamples: [RibbonTraceSample] = []
     var activeEvents: [RibbonEvent] = []
     var currentAcceleration: Float = 0
     var isStable: Bool = false
@@ -12,12 +15,16 @@ final class RibbonState {
     private let maxSamples = 12_000
     private let maxActiveEvents = 100
 
-    func appendSample(_ magnitude: Float) {
+    func appendSample(_ magnitude: Float, signedValue: Float? = nil, timestamp: TimeInterval? = nil) {
         samples.append(magnitude)
+        traceSamples.append(RibbonTraceSample(
+            timestamp: timestamp ?? CACurrentMediaTime(), value: signedValue ?? magnitude
+        ))
         if samples.count > maxSamples {
             // Trim one second at a time instead of shifting 12,000 elements at 100 Hz.
             let removedCount = min(samples.count, 100)
             samples.removeFirst(removedCount)
+            traceSamples.removeFirst(removedCount)
             activeEvents = activeEvents.compactMap { event in
                 guard event.sampleIndex >= removedCount else { return nil }
                 var rebased = event

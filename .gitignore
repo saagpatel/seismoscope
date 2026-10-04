@@ -27,3 +27,6 @@ Signing.local.xcconfig
 *.p8
 AuthKey_*.p8
 **/private_keys/
+
+# Distribution lane receipts
+dist-receipts/

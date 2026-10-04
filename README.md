@@ -30,12 +30,23 @@ open Seismoscope.xcodeproj
 ```
 
 ### Code signing
-Signing uses a local, gitignored config so no Team ID is committed. Set it up once:
+The app bundle ID is `com.seismoscope.app`; the unit-test bundle is
+`com.seismoscope.app.tests`. Marketing version remains `1.0`, and the next
+upload uses build `3`.
+
+Xcode reads the team setting from a local, gitignored config. Set it up once:
 ```bash
 cp Signing.local.xcconfig.example Signing.local.xcconfig
 # edit Signing.local.xcconfig and set DEVELOPMENT_TEAM to your Apple Developer Team ID
 ```
 `Signing.xcconfig` (committed) holds non-secret defaults and optionally includes your local file; the project reads both via XcodeGen `configFiles`.
+
+`distkit.ios.config.sh` holds the distribution lane's configuration. Its export
+options stay local like the other signing files: copy
+`ExportOptions.plist.example` to `ExportOptions.plist` and set your Team ID. The lane requests manual signing
+with the `Seismoscope App Store` profile; the export plist preserves the sibling
+lane's automatic export setting. See `APP-STORE-READINESS.md` for checks and
+operator prerequisites before signing or uploading.
 
 ### Usage
 Deploy to a physical device. Place the phone on a stable surface and tap **Start Recording**. Detected events appear as annotations on the waveform; tap any to see USGS match details.

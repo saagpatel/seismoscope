@@ -1,0 +1,1 @@
+Set your phone on a desk and watch it draw a seismogram on scrolling parchment. When it detects a jolt, it checks the USGS catalog for a matching earthquake.

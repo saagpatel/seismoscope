@@ -1,5 +1,7 @@
 import SwiftUI
 import MetalKit
+import QuartzCore
+import SeismoscopeKit
 
 struct RibbonContainerView: UIViewRepresentable {
     let ribbonState: RibbonState
@@ -71,19 +73,17 @@ struct RibbonContainerView: UIViewRepresentable {
 
             let tapX = Float(gesture.location(in: view).x)
             let viewWidth = Float(view.bounds.width)
-            let sampleCount = state.samples.count
-
-            // The rightmost sample (newest) is at pixel viewWidth.
-            // Sample at index i is at pixel: viewWidth - Float(sampleCount - 1 - i)
-            // So the tapped sample index ≈ sampleCount - 1 - (viewWidth - tapX)
-            let tappedSampleIndex = Int(Float(sampleCount - 1) - (viewWidth - tapX))
-
-            // Find nearest active event within 20px
-            let nearest = state.activeEvents.min {
-                abs($0.sampleIndex - tappedSampleIndex) < abs($1.sampleIndex - tappedSampleIndex)
+            let now = CACurrentMediaTime()
+            func distance(to event: RibbonEvent) -> Float {
+                guard state.traceSamples.indices.contains(event.sampleIndex) else { return .infinity }
+                let timestamp = state.traceSamples[event.sampleIndex].timestamp
+                let x = viewWidth - Float(RibbonTimeScale.distance(elapsedTime: now - timestamp))
+                return abs(x - tapX)
             }
 
-            if let event = nearest, abs(event.sampleIndex - tappedSampleIndex) <= 20 {
+            // Match the renderer's time scale, with a 20-point touch tolerance.
+            let nearest = state.activeEvents.min { distance(to: $0) < distance(to: $1) }
+            if let event = nearest, distance(to: event) <= 20 {
                 callback(event.id)
             }
         }

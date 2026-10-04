@@ -3,6 +3,30 @@ import Foundation
 @testable import Seismoscope
 
 @MainActor
+@Test func ribbonStateRetainsSignedSignalAlongsideMagnitude() {
+    let state = RibbonState()
+    state.appendSample(0.01, signedValue: -0.008, timestamp: 10)
+    #expect(state.samples == [0.01])
+    #expect(state.traceSamples.count == 1)
+    #expect(state.traceSamples[0].value == -0.008)
+    #expect(state.traceSamples[0].timestamp == 10)
+    #expect(state.currentAcceleration == 10)
+}
+
+@MainActor
+@Test func signedTraceHistoryTrimsWithMagnitudeHistory() {
+    let state = RibbonState()
+    for index in 0..<12_001 {
+        state.appendSample(Float(index), signedValue: -Float(index), timestamp: Double(index) / 100)
+    }
+    #expect(state.traceSamples.count == state.samples.count)
+    #expect(state.traceSamples.first?.value == -100)
+    #expect(state.traceSamples.first?.timestamp == 1)
+    #expect(state.traceSamples.last?.value == -12_000)
+    #expect(state.traceSamples.last?.timestamp == 120)
+}
+
+@MainActor
 @Test func ribbonStateAppendSample() {
     let state = RibbonState()
     state.appendSample(0.01)

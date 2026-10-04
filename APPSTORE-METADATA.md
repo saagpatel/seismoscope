@@ -1,11 +1,13 @@
-# Seismoscope — App Store Connect Metadata
+# Seismoscope App Store Connect Metadata
 
 ## Identity
+
+Store settings below are intended submission values. Confirm them in the existing store record before submission.
 
 | Field | Value |
 |-------|-------|
 | **Name** | Seismoscope |
-| **Subtitle** | Your iPhone as a seismometer |
+| **Subtitle** | A seismograph in your pocket |
 | **Bundle ID** | com.seismoscope.app |
 | **SKU** | SEISMOSCOPE-001 |
 | **Primary Category** | Utilities |
@@ -14,156 +16,179 @@
 | **Price** | Free |
 | **Availability** | All territories |
 
----
-
 ## Keywords
 
+```text
+seismometer,earthquake,accelerometer,vibration,tremor,seismic,quake,USGS,ground,motion
 ```
-seismometer,earthquake,accelerometer,seismograph,vibration,ground motion,USGS,science,physics
-```
-
-*(100 character limit — these are 88 characters)*
-
----
 
 ## Description
 
-Your iPhone has a precision accelerometer sampling 100 times per second. Seismoscope uses it the way seismologists have used instruments since 1935 — to detect ground motion, record it as a scrolling waveform, and cross-reference detected events against the USGS earthquake catalog.
+Watch your phone's movements take shape on a paper ribbon. Seismoscope uses your iPhone or iPad's accelerometer to draw a seismogram and compare detected vibrations with the USGS earthquake catalog.
 
-The display looks like a vintage drum seismograph: parchment-textured paper scrolling at one pixel per second, an ink trace that thickens and bleeds when amplitude spikes. When the app detects a vibration event, it automatically queries the USGS earthquake API and annotates the ribbon with magnitude and location if a match is found. If no match is found after three attempts, the event is labeled as a local vibration.
+The display is modeled on a drum seismograph: parchment scrolling steadily under an ink trace, with a bleed effect that spreads on stronger signals. The trace shows filtered motion through the screen, so a quiet table draws a thin line and stronger shaking draws a wider one.
 
-**Signal processing:**
-• 100Hz CoreMotion pipeline — raw accelerometer data at maximum resolution
-• 4-pole Butterworth bandpass filter (0.1–10Hz) — removes gravity, isolates ground motion frequencies
-• STA/LTA event detection — the same algorithm used in professional seismograph networks
-• Automatic re-arm — detects multiple separate events without manual reset
+Signal processing:
+• Reads the accelerometer up to 100 times a second
+• Strips gravity, then keeps the 0.1 to 10 Hz band with a Butterworth bandpass
+• STA/LTA triggering: a short running average against a long one, firing when the ratio jumps
+• Re-arms after each event, so one session can capture many
 
-**The display:**
-• Scrolling Metal ribbon renderer — procedurally generated parchment texture, 60fps
-• Variable-width ink trace — line thickens proportionally to measured acceleration
-• Gaussian blur "ink bleed" on high-amplitude signals — physically authentic
-• Time markers — vertical lines at 60-second intervals with clock times
-• Event annotations with fade-in — labeled with magnitude and location when matched
+Earthquake catalog checks:
+• Detected events first appear on the ribbon as "Local vibration"
+• A match updates the annotation with magnitude and location when available
+• Matching uses the search region, a distance under 500 km, an onset-time difference under 10 minutes, and magnitude 1.5 or greater
 
-**USGS integration:**
-• Automatic earthquake correlation — queries USGS FDSN Event API after any detected event
-• Deferred retry — checks up to 3 times over 6 minutes (earthquakes may not appear in catalog immediately)
-• Match criteria — within 500km and 10 minutes of detected onset, magnitude ≥ 1.5
-• Full event detail — magnitude, depth, distance, and a link to the USGS event page
+New earthquakes can take a few minutes to reach the catalog, so if the first check finds nothing the app tries three more times, two minutes apart (up to four events at a time). Recording and catalog checks run while the app is in the foreground.
 
-**Settings:**
-• Region picker — 50 city presets, or enter custom coordinates
-• Sensitivity slider — tune the STA/LTA threshold from more to less sensitive
-• Units toggle — milli-g or plain-language MMI intensity scale
-• Low-power mode — reduces to 50Hz sampling and pauses the Metal renderer
+Tap an event annotation to open Event Detail. See onset time, peak acceleration, dominant axis, and STA/LTA ratio. Matched events can also show magnitude, location, depth, distance, origin time, and a View on USGS link. A catalog match compares time and region; it does not prove what moved your device.
 
-**No GPS. No accounts. No subscriptions.** Your region is set by city picker — Seismoscope never requests your location. The only outbound network call is a read-only earthquake query sent to the USGS API (which is public, unauthenticated, and free). No user data leaves your device.
+Settings:
+• Choose from 50 city presets or enter custom coordinates
+• Adjust the detection threshold with the sensitivity slider
+• Read the live level in milli-g, or as an estimated Modified Mercalli intensity (I to XII) derived from acceleration using the Wald et al. (1999) relations
+• Low-power mode halves the sampling rate to 50 Hz
 
-The signal processing layer is published separately as SeismoscopeKit, an open-source Swift Package on GitHub.
-
----
+Seismoscope never asks for your location and has no accounts, ads, analytics, or tracking. Catalog checks send region coordinates (San Francisco until you choose a city or enter coordinates) and an event-time window to USGS. Motion data and event history stay on your device. Tapping View on USGS opens the event page in your browser.
 
 ## Promotional Text
 
-*(Optional — appears above description, can be updated without new app version)*
-
-```
-Your iPhone as a vintage seismograph. 100Hz accelerometer → Butterworth filter → USGS earthquake correlation.
+```text
+Set your phone on a desk and watch it draw a seismogram on scrolling parchment. When it detects a jolt, it checks the USGS catalog for a matching earthquake.
 ```
 
----
+## Field Lengths
+
+Python character counts include spaces, punctuation, and description line breaks. Markdown headings and code fences are excluded.
+
+| Field | Characters | Limit |
+|-------|------------|-------|
+| Name | 11 | 30 |
+| Subtitle | 28 | 30 |
+| Promotional text | 157 | 170 |
+| Keywords | 86 | 100 |
+| Description | 2308 | 4000 |
 
 ## Support URL
 
 https://github.com/saagpatel/seismoscope/issues
 
----
-
 ## Privacy Policy URL
 
 https://github.com/saagpatel/seismoscope/blob/main/PRIVACY.md
 
----
-
 ## Screenshots
 
 ### Required Sizes
-- **6.7" Display** — 1290 × 2796 px (iPhone 16 Pro Max / iPhone 15 Pro Max)
-- **6.5" Display** — 1242 × 2688 px (iPhone 11 Pro Max / iPhone XS Max)
+
+- **6.9-inch iPhone:** 1320 x 2868 px
+- **13-inch iPad:** 2064 x 2752 px. Both device families are enabled (`TARGETED_DEVICE_FAMILY = 1,2`).
 
 ### Screenshot Plan (4 screenshots per size)
 
-| # | Screen | Simulator State | Headline Overlay |
-|---|--------|-----------------|------------------|
-| 1 | MetalRibbonView — event annotated | Parchment ribbon visible with a labeled earthquake annotation: "M3.5 — 47km NE of San Jose, CA" in warm red with leader line; time markers at left and right edges; trace showing the event spike then settling back to micro-tremor baseline | "Every tremor, recorded." |
-| 2 | MetalRibbonView — ambient state | Ribbon in steady ambient state — subtle micro-tremor trace on parchment; StatusBarView at top showing "Stable • 0.3 milli-g • MMI I"; 3 time markers evenly spaced | "Your iPhone, always listening." |
-| 3 | EventDetailView sheet | Sheet slid up over ribbon; "M3.5 Earthquake" header; details visible: onset time, duration, peak acceleration, location "47km NE of San Jose, CA", depth "8.2 km", distance "142 km", "View on USGS" link button | "Cross-referenced with the USGS earthquake catalog." |
-| 4 | SettingsView | Region picker list visible with San Francisco selected; sensitivity slider in mid position; units toggle on "milli-g"; Low-power mode toggle visible at bottom | "Tune it for your location and sensitivity." |
+| # | Screen | Capture State | Headline Overlay |
+|---|--------|---------------|------------------|
+| 1 | Main ribbon | Physical device in foreground with motion samples visible on parchment; status shows the actual `mg` value and either `Stable` or `Place on stable surface` | "Motion on a paper ribbon." |
+| 2 | Main ribbon, MMI readout | In Settings, turn off `Show acceleration in milli-g`, then tap `Done`; capture the ribbon with its actual `MMI` Roman numeral | "An acceleration-based intensity estimate." |
+| 3 | Settings, Region | Top of Settings showing `Region` and the city rows that fit on screen; capture the actual selected checkmark if visible | "Choose a region for catalog checks." |
+| 4 | Settings, lower controls | Scroll past the region list to show `Sensitivity`, `Threshold`, `Show acceleration in milli-g`, and `Low-power mode`; confirm the composition on each device size | "Adjust sensitivity and sampling." |
 
 ### How to Take Screenshots
-1. Open Xcode → Simulator → select iPhone 16 Pro Max
-2. Build and run the Seismoscope target with `SyntheticDataSource` active in `#if DEBUG`
-3. Use the impulse mode to generate a spike, then switch to the ambient noise mode for the steady-state screenshot
-4. For the annotated screenshot, inject a test earthquake event via the Debug Settings toggle
-5. **Xcode menu: Product → Simulator → Take Screenshot** (saves to Desktop)
-   OR: `xcrun simctl io booted screenshot ~/Desktop/screenshot.png`
-6. Repeat for iPhone XS Max (6.5") by switching simulator
-7. Add marketing text overlays in Sketch, Figma, or Canva before uploading
 
-*Note: The Metal ribbon renders more convincingly on a physical device — take final screenshots on hardware for App Store submission.*
+1. On a full Xcode host, run the Release build on supported physical iPhone and iPad hardware. Use portrait orientation and confirm captures have the required pixel dimensions.
+2. Keep the app in the foreground on a stable surface. Capture the live ribbon and its actual readings. If using a gentle desk tap to show motion, capture the resulting trace without adding an earthquake label.
+3. Open the gear button (`Settings` accessibility label). Scroll past the 50 city presets to reach the display toggle. Turn off `Show acceleration in milli-g`, tap `Done`, and capture the MMI readout.
+4. Reopen Settings to capture the region list and, separately, the lower controls. Capture only controls that actually fit on screen.
+5. Add the listed headline overlays outside the app UI. Preserve the captured readings and labels. Upload four captures for each required size, eight total.
 
----
+The plan requires no earthquake match, clock labels, fixed marker count, or event injection. A Release simulator without an accelerometer shows no live motion. A Debug simulator offers `Sine`, `Noise`, and `Impulse` sample controls, but these do not create detected events or USGS matches. Use physical Release captures for the store images; exclude Debug controls.
 
 ## App Review Notes
 
-```
-Seismoscope uses the device accelerometer (CoreMotion) to detect ground vibrations and display them
-as a scrolling seismogram. The only outbound network call is a read-only GET request to:
+```text
+Seismoscope displays filtered device motion while the app is in the foreground.
+No account, credentials, or reviewer login are required.
+
+Automatic catalog requests use HTTPS GET at:
 https://earthquake.usgs.gov/fdsnws/event/1/query
-This is a public, unauthenticated API operated by the US Geological Survey. The query contains
-only: region lat/lon (user-configured, not GPS), a time window, magnitude threshold, and radius.
-No user PII is transmitted.
+The query fields are format=geojson, starttime, endtime, latitude, longitude,
+maxradiuskm=500, minmagnitude=1.5, orderby=time, and limit=20. Coordinates come
+from San Francisco until you select a city or enter custom coordinates.
+The search window runs from 10 minutes
+before detected onset to 30 minutes after it; matching uses a time difference
+under 10 minutes. Raw accelerometer samples and stored event history are not
+uploaded. View on USGS opens the matched event's USGS web page.
 
-Required permissions:
-- Motion & Fitness (NSMotionUsageDescription): "Seismoscope uses your iPhone's accelerometer to
-  detect ground vibrations and display them as a seismogram."
-  
-No location permission required (region is set by city picker, not GPS).
-No camera, microphone, photo library, or other permissions required.
+The app declares NSMotionUsageDescription for accelerometer use. It does not
+request location, camera, microphone, or photo-library access.
 
-To test core features:
-1. Launch app — ribbon begins scrolling immediately at 1px/second
-2. Place iPhone flat on a stable hard surface (desk, table)
-3. After ~3 seconds the stability indicator shows "Stable"
-4. Tap the desk firmly — a vibration spike appears on the ribbon
-5. After 10–30 seconds, the app queries USGS; if no earthquake matches, the annotation reads "Local vibration"
-6. In Settings, change the region to your location and adjust the sensitivity slider
+On a physical iPhone or iPad:
+1. Launch the app. Sampling starts automatically when an accelerometer is
+   available. There is no Start Recording button.
+2. Tap the gear button (accessibility label: Settings). Under Region, select
+   a city near the area you want to search. Custom Location reveals Lat and
+   Lon fields; enter valid coordinates and tap Apply if using that option.
+   Until you choose a region, catalog requests use the San Francisco preset.
+   The Region footer explains that the coordinates are sent to USGS.
+3. Scroll past the city list to Sensitivity. Threshold has More sensitive and
+   Less sensitive labels. Leave Low-power mode off for this test. Tap Done.
+4. Place the device on a quiet, hard surface and leave the app in the foreground
+   for at least 60 seconds. Detection requires 45 seconds of samples after
+   startup or a sampling-rate change. Stable appears only after the filtered
+   stability signal stays quiet for three seconds; launch-to-Stable time varies.
+5. Gently tap the desk near the device. Motion can appear on the trace without
+   crossing the event threshold. If needed, lower Threshold toward More
+   sensitive and try again after the motion settles.
+6. A detected event initially has a Local vibration annotation. Tap near it to
+   open Event Detail, which shows Detection fields including Onset, Peak,
+   Dominant Axis, and STA/LTA Ratio. It does not show a recorded duration.
+7. If a correlation slot is available, the catalog query starts at detection.
+   Event Detail may show Checking USGS earthquake catalog… when opened.
+   While the annotation is still visible, close the sheet with Done and reopen
+   it to load the latest stored result. A qualifying catalog event shows Earthquake
+   matched and USGS Earthquake Data. View on USGS appears when a valid link is
+   available. A desk tap usually has no catalog match; none is guaranteed for
+   the reviewer's chosen region and time. The Local vibration ribbon label is
+   not a conclusion that catalog checks have finished.
+8. Unmatched checks can retry three times with a two-minute wait each. Network
+   failures or rate limiting can extend the wait. The app checks up to four
+   events concurrently; additional detections skip the query while slots are
+   occupied. Delayed results can outlast the visible annotation; there is no
+   separate history screen for reopening it later. The timeout message counts
+   the initial check plus retries. Events skipped by the cap show Not checked
+   (too many events at once). Keep the app in the
+   foreground; backgrounding cancels checks.
+9. In Settings, turn off Show acceleration in milli-g and tap Done. The status
+   readout changes from mg to an MMI Roman numeral marked (est.), with an
+   Estimated Modified Mercalli intensity VoiceOver label. Turning it on
+   restores mg. Low-power mode lowers requested sampling to 50 Hz; it does
+   not pause rendering and restarts the detector's warmup.
 
-No account, no credentials, no reviewer login required.
+On a simulator without an accelerometer, the Release build has no live motion
+input. Settings remain available. Debug-only Sine, Noise, and Impulse controls
+produce samples for display inspection, without detection or catalog checks.
+Use a physical device to review live detection. Matching a catalog event is
+a time-and-region comparison, not scientific validation of the device signal.
 ```
-
----
 
 ## Checklist Before Submission
 
-- [ ] Bundle ID `com.seismoscope.app` registered in Apple Developer portal
-- [ ] App icon 1024×1024 appears correctly in Xcode asset catalog (no warnings)
-- [ ] `NSMotionUsageDescription` in Info.plist with plain-English string
-- [ ] No location, camera, microphone, or photo library entitlements declared
-- [ ] `PrivacyInfo.xcprivacy` present — Motion API declared, `NSPrivacyTracking = false`
-- [ ] Network access restricted to `earthquake.usgs.gov` (consider App Transport Security if needed)
-- [ ] Archive succeeds: `Product → Archive` with no errors
-- [ ] Validate App passes with 0 errors
-- [ ] All 8 screenshots uploaded (4 per required size: 6.7" + 6.5")
-- [ ] Description, keywords, subtitle filled in App Store Connect
-- [ ] Price set to Free in Pricing and Availability
-- [ ] Age rating questionnaire complete (4+)
-- [ ] Support URL and Privacy Policy URL provided (privacy policy must note: only outbound call is USGS query, no personal data)
-- [ ] Privacy nutrition label: no data collected or linked to user; network usage explained
-- [ ] `cd SeismoscopeKit && swift build && swift test` — all passing before submission
-- [ ] TestFlight test complete: run app on desk for 5 minutes, verify tap detection, verify USGS query fires, verify event detail sheet
-- [ ] Test on physical device — simulator does not provide real accelerometer data for final validation
-- [ ] Submit for Review
+- [ ] Confirm the existing `com.seismoscope.app` store record and intended identity settings
+- [ ] Confirm the 1024 x 1024 app icon appears correctly in the asset catalog
+- [ ] Verify the built Info.plist includes `NSMotionUsageDescription` and no unused permission strings
+- [ ] Verify `PrivacyInfo.xcprivacy` is packaged, tracking is false, and required-reason entries match API usage; Core Motion is covered by the usage string, not a separate required-reason category
+- [ ] Review USGS request fields and the `View on USGS` navigation path; do not claim an enforced network host restriction
+- [ ] Run repository package tests, app tests, and an unsigned Release build on a full Xcode host; record actual results
+- [ ] Archive and validate successfully after signing is qualified
+- [ ] Capture and upload eight accurate screenshots: four at 1320 x 2868 for iPhone and four at 2064 x 2752 for iPad; exclude Debug controls
+- [ ] Enter the checked description, promotional text, keywords, and subtitle in App Store Connect
+- [ ] Confirm Free pricing, territories, and age rating questionnaire answers in the store record
+- [ ] Confirm support and privacy URLs are accessible and the policy explains region coordinates (San Francisco by default), event-time queries, local motion/history, USGS page navigation, and ordinary network information such as the device IP address
+- [ ] Reconcile App Privacy answers with the manifest's Precise Location and Other Data Types for App Functionality, neither linked to identity nor used for tracking; qualify USGS handling/retention before finalizing answers
+- [ ] On physical iPhone and iPad, verify foreground motion, post-warmup detection, event detail, actual catalog-check outcomes, the mg/MMI switch, and 50 Hz low-power sampling with rendering continuing
+- [ ] In TestFlight, follow the review steps and record detection and catalog outcomes without requiring an earthquake match
+- [ ] Submit for Review after the remaining readiness gates are met
 
 ## Copyright
+
 © 2026 saagpatel

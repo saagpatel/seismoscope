@@ -1,4 +1,5 @@
 import MetalKit
+import SeismoscopeKit
 import simd
 
 @MainActor
@@ -23,7 +24,7 @@ final class RibbonRenderer: NSObject {
     private var annotationVertexBuffers: [MTLBuffer]
     private let bufferSemaphore = DispatchSemaphore(value: 3)
     private var bufferIndex = 0
-    private let traceBufferCapacity = 8000
+    private var traceBufferCapacity = 8000
     // Max 20 events × 12 vertices (6 line + 6 label) per event
     private let annotationBufferCapacity = 240
 
@@ -34,6 +35,9 @@ final class RibbonRenderer: NSObject {
     private var previousTime: CFTimeInterval = 0
     private var startTime: CFTimeInterval = 0
     private var viewportSize: SIMD2<Float> = .zero
+    private var contentScale: Double = 1
+    private var frameTime: CFTimeInterval = 0
+    private var shouldBlurTrace = false
 
     var ribbonState: RibbonState?
     var textLabelCache: TextLabelCache?
@@ -143,10 +147,12 @@ final class RibbonRenderer: NSObject {
 
     private func updateScroll() {
         let now = CACurrentMediaTime()
+        frameTime = now
         if startTime == 0 { startTime = now }
         if previousTime > 0 {
-            let deltaTime = Float(now - previousTime)
-            scrollOffset += deltaTime * 1.0 // 1 px/sec
+            scrollOffset += Float(RibbonTimeScale.distance(
+                elapsedTime: now - previousTime, contentScale: contentScale
+            ))
             scrollOffset = fmod(scrollOffset, 1024.0)
         }
         previousTime = now
@@ -155,7 +161,7 @@ final class RibbonRenderer: NSObject {
     private func updateUniforms() {
         var uniforms = RibbonUniforms(
             scrollOffset: scrollOffset,
-            scrollRate: 1.0,
+            scrollRate: Float(RibbonTimeScale.distance(elapsedTime: 1, contentScale: contentScale)),
             viewportSize: viewportSize,
             traceYCenter: 0.5,
             time: Float(CACurrentMediaTime() - startTime),
@@ -167,55 +173,48 @@ final class RibbonRenderer: NSObject {
     }
 
     private func generateTraceVertices() -> Int {
-        guard let state = ribbonState else { return 0 }
-        let samples = state.samples
-        guard !samples.isEmpty else { return 0 }
-
-        let visibleCount = min(samples.count, Int(viewportSize.x) + 2)
-        let startIndex = max(0, samples.count - visibleCount)
-        let vertexCount = visibleCount * 2
-
+        shouldBlurTrace = false
+        guard let state = ribbonState, viewportSize.x > 0, viewportSize.y > 0 else { return 0 }
+        let pixelsPerSecond = RibbonTimeScale.distance(elapsedTime: 1, contentScale: contentScale)
+        let paperPosition = frameTime * pixelsPerSecond
+        let columns = RibbonTrace.envelopes(samples: state.traceSamples, pixelsPerSecond: pixelsPerSecond)
+            .filter {
+                let x = Double(viewportSize.x) - (paperPosition - Double($0.column))
+                return x + 1 >= 0 && x <= Double(viewportSize.x)
+            }
+        // One independent quad (two triangles) per occupied pixel column.
+        let vertexCount = columns.count * 6
+        guard vertexCount > 0 else { return 0 }
         guard vertexCount <= traceBufferCapacity else { return 0 }
 
         let buffer = traceVertexBuffers[bufferIndex]
         let vertices = buffer.contents().bindMemory(to: TraceVertex.self, capacity: vertexCount)
 
-        let yCenter: Float = 0.0
         let pxToNDC_x: Float = 2.0 / viewportSize.x
         let pxToNDC_y: Float = 2.0 / viewportSize.y
-        let subPixelOffset = fmod(scrollOffset, 1.0)
+        // 0.05 g reaches 90% of the half-height; quiet 0.0005 g remains a small wobble.
+        let gain: Float = 18
 
-        for i in 0..<visibleCount {
-            let magnitude = samples[startIndex + i]
-            let pixelX = viewportSize.x - Float(visibleCount - 1 - i) - subPixelOffset
-            let ndcX = pixelX * pxToNDC_x - 1.0
-
-            let widthPx = min(max(abs(magnitude) * 400.0, 1.5), 8.0)
-            let halfWidthNDC = (widthPx / 2.0) * pxToNDC_y
-
-            let vi = i * 2
-            vertices[vi] = TraceVertex(
-                position: SIMD2<Float>(ndcX, yCenter + halfWidthNDC),
-                alpha: 1.0,
-                padding: 0
-            )
-            vertices[vi + 1] = TraceVertex(
-                position: SIMD2<Float>(ndcX, yCenter - halfWidthNDC),
-                alpha: 1.0,
-                padding: 0
-            )
+        for (i, column) in columns.enumerated() {
+            let pixelX = viewportSize.x - Float(paperPosition - Double(column.column))
+            let left = pixelX * pxToNDC_x - 1
+            let right = (pixelX + 1) * pxToNDC_x - 1
+            let amplitude = max(abs(column.min), abs(column.max))
+            shouldBlurTrace = shouldBlurTrace || amplitude > 0.005
+            let widthPx = min(max(amplitude * 400, 1.5), 8) * Float(contentScale)
+            let halfWidthNDC = min(widthPx / 2 * pxToNDC_y, 1)
+            let top = min(max(column.max * gain, -1 + halfWidthNDC), 1 - halfWidthNDC) + halfWidthNDC
+            let bottom = min(max(column.min * gain, -1 + halfWidthNDC), 1 - halfWidthNDC) - halfWidthNDC
+            let positions: [SIMD2<Float>] = [
+                SIMD2(left, bottom), SIMD2(right, bottom), SIMD2(left, top),
+                SIMD2(right, bottom), SIMD2(right, top), SIMD2(left, top)
+            ]
+            for (offset, position) in positions.enumerated() {
+                vertices[i * 6 + offset] = TraceVertex(position: position, alpha: 1, padding: 0)
+            }
         }
 
         return vertexCount
-    }
-
-    private func needsBlur() -> Bool {
-        guard let state = ribbonState else { return false }
-        let visibleCount = min(state.samples.count, Int(viewportSize.x) + 2)
-        let startIndex = max(0, state.samples.count - visibleCount)
-        let end = state.samples.count
-        guard startIndex < end else { return false }
-        return state.samples[startIndex..<end].contains { abs($0) > 0.005 }
     }
 
     /// Builds annotation vertices for all active events. Returns (lineCount, labelCount per event).
@@ -226,7 +225,6 @@ final class RibbonRenderer: NSObject {
         let samples = state.samples
         guard !samples.isEmpty else { return [] }
 
-        let subPixelOffset = fmod(scrollOffset, 1.0)
         let buffer = annotationVertexBuffers[bufferIndex]
         let verts = buffer.contents().bindMemory(to: AnnotationVertex.self, capacity: annotationBufferCapacity)
 
@@ -246,7 +244,11 @@ final class RibbonRenderer: NSObject {
 
         for event in state.activeEvents {
             // Compute pixel X of this event's onset sample
-            let pixelX = viewportSize.x - Float(samples.count - 1 - event.sampleIndex) - subPixelOffset
+            guard state.traceSamples.indices.contains(event.sampleIndex) else { continue }
+            let timestamp = state.traceSamples[event.sampleIndex].timestamp
+            let pixelX = viewportSize.x - Float(RibbonTimeScale.distance(
+                elapsedTime: frameTime - timestamp, contentScale: contentScale
+            ))
             guard pixelX >= -10, pixelX <= viewportSize.x + 10 else { continue }
             guard writeIndex + 12 <= annotationBufferCapacity else { break }
 
@@ -356,6 +358,17 @@ final class RibbonRenderer: NSObject {
     private func rebuildOffscreenTextures(width: Int, height: Int) {
         guard width > 0, height > 0 else { return }
 
+        let requiredCapacity = (width + 2) * 6
+        if requiredCapacity > traceBufferCapacity {
+            traceBufferCapacity = requiredCapacity
+            traceVertexBuffers = (0..<3).map { _ in
+                device.makeBuffer(
+                    length: requiredCapacity * MemoryLayout<TraceVertex>.stride,
+                    options: .storageModeShared
+                )!
+            }
+        }
+
         let desc = MTLTextureDescriptor.texture2DDescriptor(
             pixelFormat: .bgra8Unorm,
             width: width,
@@ -397,6 +410,9 @@ extension RibbonRenderer: MTKViewDelegate {
             return
         }
 
+        if view.bounds.width > 0 {
+            contentScale = Double(viewportSize.x) / Double(view.bounds.width)
+        }
         updateScroll()
         updateUniforms()
         let vertexCount = generateTraceVertices()
@@ -428,7 +444,7 @@ extension RibbonRenderer: MTKViewDelegate {
             encoder.endEncoding()
         }
 
-        // Pass 2: Trace polyline → traceTexture
+        // Pass 2: Signed column envelopes → traceTexture
         let tracePassDesc = MTLRenderPassDescriptor()
         tracePassDesc.colorAttachments[0].texture = traceTex
         tracePassDesc.colorAttachments[0].loadAction = .clear
@@ -438,7 +454,7 @@ extension RibbonRenderer: MTKViewDelegate {
         if vertexCount > 0, let encoder = commandBuffer.makeRenderCommandEncoder(descriptor: tracePassDesc) {
             encoder.setRenderPipelineState(tracePipeline)
             encoder.setVertexBuffer(traceVertexBuffers[currentBufferIndex], offset: 0, index: 0)
-            encoder.drawPrimitives(type: .triangleStrip, vertexStart: 0, vertexCount: vertexCount)
+            encoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: vertexCount)
             encoder.endEncoding()
         } else if let encoder = commandBuffer.makeRenderCommandEncoder(descriptor: tracePassDesc) {
             // Clear the trace texture even when no vertices
@@ -447,7 +463,7 @@ extension RibbonRenderer: MTKViewDelegate {
 
         // Pass 3: Blur compute (conditional)
         let blurApplied: Bool
-        if needsBlur(), let encoder = commandBuffer.makeComputeCommandEncoder() {
+        if shouldBlurTrace, let encoder = commandBuffer.makeComputeCommandEncoder() {
             encoder.setComputePipelineState(blurPipeline)
             encoder.setTexture(traceTex, index: 0)
             encoder.setTexture(blurTex, index: 1)

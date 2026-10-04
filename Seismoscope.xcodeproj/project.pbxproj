@@ -84,8 +84,8 @@
 		ED0F66276950E48BD796F9B2 /* USGSClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = USGSClient.swift; sourceTree = "<group>"; };
 		FC600610AF749C94E7E2B83B /* ShaderTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShaderTypes.h; sourceTree = "<group>"; };
 		FC94003FBAAEF9A82D93A25B /* RibbonContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RibbonContainerView.swift; sourceTree = "<group>"; };
-		"TEMP_32BB3FC6-CEF6-445B-B971-AB6FD5225F05" /* Signing.Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Signing.Debug.xcconfig; sourceTree = "<group>"; };
-		"TEMP_ABC68A65-C23D-4852-A3A2-914C81007A97" /* Signing.Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Signing.Release.xcconfig; sourceTree = "<group>"; };
+		"TEMP_591DF937-E1C8-40B5-8D4F-78D7DFE20331" /* Signing.Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Signing.Release.xcconfig; sourceTree = "<group>"; };
+		"TEMP_6954C10C-2F0D-4767-B6D2-DA17278429D2" /* Signing.Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Signing.Debug.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -246,11 +246,11 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
-		"TEMP_9A21151B-0327-452E-8724-A4F93737350F" /* Seismoscope */ = {
+		"TEMP_75B791AF-D75C-4DB2-A1A8-DD49EFE8F29F" /* Seismoscope */ = {
 			isa = PBXGroup;
 			children = (
-				"TEMP_32BB3FC6-CEF6-445B-B971-AB6FD5225F05" /* Signing.Debug.xcconfig */,
-				"TEMP_ABC68A65-C23D-4852-A3A2-914C81007A97" /* Signing.Release.xcconfig */,
+				"TEMP_6954C10C-2F0D-4767-B6D2-DA17278429D2" /* Signing.Debug.xcconfig */,
+				"TEMP_591DF937-E1C8-40B5-8D4F-78D7DFE20331" /* Signing.Release.xcconfig */,
 			);
 			path = Seismoscope;
 			sourceTree = "<group>";
@@ -427,6 +427,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 3;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -460,13 +461,13 @@
 		};
 		43CA5B6A098B3066917A7C32 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = "TEMP_32BB3FC6-CEF6-445B-B971-AB6FD5225F05" /* Signing.Debug.xcconfig */;
+			baseConfigurationReference = "TEMP_6954C10C-2F0D-4767-B6D2-DA17278429D2" /* Signing.Debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/Seismoscope/Metal";
-				INFOPLIST_KEY_NSMotionUsageDescription = "Seismoscope uses your iPhone's accelerometer to detect ground vibrations and display them as a seismogram.";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_NSMotionUsageDescription = "Seismoscope uses your device's accelerometer to draw a seismogram of its motion and compare detected vibrations with the USGS earthquake catalog.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -494,7 +495,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.seismoscope.tests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.seismoscope.app.tests;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Seismoscope.app/Seismoscope";
@@ -511,7 +512,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.seismoscope.tests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.seismoscope.app.tests;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Seismoscope.app/Seismoscope";
@@ -552,6 +553,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 3;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -578,13 +580,13 @@
 		};
 		DE75DFD17F7407EA696A78D8 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = "TEMP_ABC68A65-C23D-4852-A3A2-914C81007A97" /* Signing.Release.xcconfig */;
+			baseConfigurationReference = "TEMP_591DF937-E1C8-40B5-8D4F-78D7DFE20331" /* Signing.Release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/Seismoscope/Metal";
-				INFOPLIST_KEY_NSMotionUsageDescription = "Seismoscope uses your iPhone's accelerometer to detect ground vibrations and display them as a seismogram.";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_NSMotionUsageDescription = "Seismoscope uses your device's accelerometer to draw a seismogram of its motion and compare detected vibrations with the USGS earthquake catalog.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
