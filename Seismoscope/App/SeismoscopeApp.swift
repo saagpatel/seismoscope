@@ -37,7 +37,7 @@ struct SeismoscopeApp: App {
                 }
                 .ignoresSafeArea()
 
-                StatusBarView(ribbonState: ribbonState) {
+                StatusBarView(ribbonState: ribbonState, useMilliG: appState.useMilliG) {
                     showSettings = true
                 }
 
