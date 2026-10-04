@@ -36,7 +36,7 @@ final class AccelerometerPipeline: @unchecked Sendable {
     init() {
         self.motionManager = CMMotionManager()
         self.operationQueue = OperationQueue()
-        self.operationQueue.name = "com.seismoscope.pipeline"
+        self.operationQueue.name = "com.seismoscope.app.pipeline"
         self.operationQueue.qualityOfService = .userInteractive
         self.operationQueue.maxConcurrentOperationCount = 1
         self.state = PipelineState(sampleRate: 100)
