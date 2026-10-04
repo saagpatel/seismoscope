@@ -146,6 +146,13 @@ final class RibbonRenderer: NSObject {
     }
 
     private func updateScroll() {
+        #if DEBUG
+        if AppStoreScreenshot.requested != nil {
+            frameTime = AppStoreScreenshot.frameTime
+            scrollOffset = 0
+            return
+        }
+        #endif
         let now = CACurrentMediaTime()
         frameTime = now
         if startTime == 0 { startTime = now }
@@ -168,6 +175,11 @@ final class RibbonRenderer: NSObject {
             padding0: 0,
             padding1: 0
         )
+        #if DEBUG
+        if AppStoreScreenshot.requested != nil {
+            uniforms.time = 0
+        }
+        #endif
         let buffer = uniformBuffers[bufferIndex]
         memcpy(buffer.contents(), &uniforms, MemoryLayout<RibbonUniforms>.stride)
     }

@@ -41,6 +41,16 @@ import Observation
     // MARK: - Init
 
     init() {
+        #if DEBUG
+        if let shot = AppStoreScreenshot.requested {
+            // Initial assignments do not run didSet: existing preferences are left intact.
+            self.region = .defaultPreset
+            self.staLtaThreshold = 4.0
+            self.useMilliG = shot != .ribbonMMI
+            self.lowPowerMode = false
+            return
+        }
+        #endif
         let defaults = UserDefaults.standard
 
         // Restore region

@@ -10,12 +10,7 @@ struct SettingsView: View {
 
     var body: some View {
         NavigationStack {
-            Form {
-                regionSection
-                sensitivitySection
-                displaySection
-                batterySection
-            }
+            settingsContent
             .navigationTitle("Settings")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -23,6 +18,38 @@ struct SettingsView: View {
                     Button("Done") { dismiss() }
                 }
             }
+        }
+    }
+
+    @ViewBuilder
+    private var settingsContent: some View {
+        #if DEBUG
+        if AppStoreScreenshot.requested == .settingsControls {
+            ScrollViewReader { proxy in
+                settingsForm
+                    .task {
+                        // Let the sheet and Form lay out before scrolling its existing sections.
+                        try? await Task.sleep(for: .milliseconds(500))
+                        proxy.scrollTo("sensitivity", anchor: .top)
+                    }
+            }
+        } else {
+            settingsForm
+        }
+        #else
+        settingsForm
+        #endif
+    }
+
+    private var settingsForm: some View {
+        Form {
+            regionSection
+            sensitivitySection
+                #if DEBUG
+                .id("sensitivity")
+                #endif
+            displaySection
+            batterySection
         }
     }
 

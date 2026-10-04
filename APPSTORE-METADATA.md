@@ -86,22 +86,35 @@ https://github.com/saagpatel/seismoscope/blob/main/PRIVACY.md
 
 ### Screenshot Plan (4 screenshots per size)
 
-| # | Screen | Capture State | Headline Overlay |
-|---|--------|---------------|------------------|
-| 1 | Main ribbon | Physical device in foreground with motion samples visible on parchment; status shows the actual `mg` value and either `Stable` or `Place on stable surface` | "Motion on a paper ribbon." |
-| 2 | Main ribbon, MMI readout | In Settings, turn off `Show acceleration in milli-g`, then tap `Done`; capture the ribbon with its actual `MMI` Roman numeral | "An acceleration-based intensity estimate." |
-| 3 | Settings, Region | Top of Settings showing `Region` and the city rows that fit on screen; capture the actual selected checkmark if visible | "Choose a region for catalog checks." |
-| 4 | Settings, lower controls | Scroll past the region list to show `Sensitivity`, `Threshold`, `Show acceleration in milli-g`, and `Low-power mode`; confirm the composition on each device size | "Adjust sensitivity and sampling." |
+The `n` column maps directly to the Debug-only launch argument
+`-AppStoreScreenshot <n>`. Each row is captured at both required sizes; no row
+requires device-only hardware because the ribbon uses the existing Debug
+synthetic source. These are display fixtures, not measured earthquakes.
+
+| n | Screen | Capture State | Device Sizes | Capture | Headline Overlay |
+|---|--------|---------------|--------------|---------|------------------|
+| 1 | Main ribbon | Fixed-seed quiet-table noise (0.00008 g amplitude) on parchment, a thin frozen signed wobble, actual sample-derived `mg` readout, `Stable`; Debug controls hidden | 6.9-inch iPhone 1320 x 2868; 13-inch iPad 2064 x 2752 | Simulator | "Motion on a paper ribbon." |
+| 2 | Main ribbon, MMI readout | Synthetic 50-second earthquake from 50–100 seconds in the frozen 120-second history: small P-wave, larger S-wave, decaying coda, matched `M3.2 — San Jose, CA` fixture annotation; milli-g disabled, quiet-tail `MMI I (est.)` readout, `Stable`; Debug controls hidden | 6.9-inch iPhone 1320 x 2868; 13-inch iPad 2064 x 2752 | Simulator | "An acceleration-based intensity estimate." |
+| 3 | Event Detail | Existing Event Detail sheet for the same matched fixture: earthquake match badge, 50-second detection with sample-derived peak, and USGS fixture magnitude, place, depth, distance, and origin time; no link to a fabricated event page | 6.9-inch iPhone 1320 x 2868; 13-inch iPad 2064 x 2752 | Simulator | "Explore an earthquake match." |
+| 4 | Settings, lower controls | Settings scrolled to `Sensitivity`, showing `Threshold` at `4.0×`, `Show acceleration in milli-g` on, and `Low-power mode` off; confirm composition on each size | 6.9-inch iPhone 1320 x 2868; 13-inch iPad 2064 x 2752 | Simulator | "Adjust sensitivity and sampling." |
 
 ### How to Take Screenshots
 
-1. On a full Xcode host, run the Release build on supported physical iPhone and iPad hardware. Use portrait orientation and confirm captures have the required pixel dimensions.
-2. Keep the app in the foreground on a stable surface. Capture the live ribbon and its actual readings. If using a gentle desk tap to show motion, capture the resulting trace without adding an earthquake label.
-3. Open the gear button (`Settings` accessibility label). Scroll past the 50 city presets to reach the display toggle. Turn off `Show acceleration in milli-g`, tap `Done`, and capture the MMI readout.
-4. Reopen Settings to capture the region list and, separately, the lower controls. Capture only controls that actually fit on screen.
-5. Add the listed headline overlays outside the app UI. Preserve the captured readings and labels. Upload four captures for each required size, eight total.
+1. On a full Xcode host, install the iOS simulator runtime and create devices named exactly `iPhone 18 Pro Max` and `iPad Pro 13-inch (M5)`. Keep them in portrait orientation, with the default text size. The script fails clearly if a required device is missing or dimensions differ.
+2. Run `scripts/capture-screenshots.sh` from any directory. It builds Debug once without signing, installs the built app, uses light appearance and English, sets the status bar to 9:41 with full Wi-Fi and battery, and launches each planned state. Before capturing each device, it launches once, waits two seconds, and terminates to clear the cross-app status-bar back link. Termination tolerates an app that is not running. No motion permissions or catalog requests are triggered. There is no onboarding flow to bypass.
+3. The script waits four seconds per state. Override all waits with `SHOT_WAIT`, or individual waits with `SHOT_WAIT_1` through `SHOT_WAIT_4` (seconds); for example, `SHOT_WAIT_4=6 scripts/capture-screenshots.sh`. `DERIVED` overrides the default `.build/shots` build directory.
+4. Find the eight dimension-checked PNGs in `screenshots/appstore/iphone-18-pro-max/01.png` through `04.png` and `screenshots/appstore/ipad-pro-13-inch-m5/01.png` through `04.png`. Inspect the real UI, especially the Settings scroll composition, before uploading. The script clears status bar overrides on exit and shuts down only devices it booted. A previously booted simulator remains booted.
+5. Add the listed headline overlays outside the app UI if desired. The script captures raw app UI and does not add overlays. Preserve captured readings and labels. Generated captures and screenshot build products are gitignored; the dispatcher uploads them.
 
-The plan requires no earthquake match, clock labels, fixed marker count, or event injection. A Release simulator without an accelerometer shows no live motion. A Debug simulator offers `Sine`, `Noise`, and `Impulse` sample controls, but these do not create detected events or USGS matches. Use physical Release captures for the store images; exclude Debug controls.
+The four planned states use no camera, LiDAR, Bluetooth, or live accelerometer
+input, so there are no `OPERATOR: capture on device` rows. Shots 2 and 3 seed the
+same synthetic earthquake record and local USGS-format catalog fixture; the
+existing correlator validates the match without a network request. Magnitude and
+place are fixture values, not evidence of a measured or historical earthquake.
+The fixed render clock and seeded Debug waveform avoid time and randomness drift.
+Settings start from deterministic defaults; screenshot-mode event storage is in memory.
+Release contains no screenshot mode and still needs a physical device for live
+motion and detection review.
 
 ## App Review Notes
 
