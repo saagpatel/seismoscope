@@ -30,3 +30,7 @@ AuthKey_*.p8
 
 # Distribution lane receipts
 dist-receipts/
+
+# Generated App Store captures and screenshot build products
+screenshots/appstore/
+.build/shots/
