@@ -19,7 +19,6 @@ build/
 *.bak
 
 # Local signing config — contains Team ID and provisioning profile names
-ExportOptions.plist
 fastlane/.env
 Signing.local.xcconfig
 
@@ -27,3 +26,6 @@ Signing.local.xcconfig
 *.p8
 AuthKey_*.p8
 **/private_keys/
+
+# Distribution lane receipts
+dist-receipts/
