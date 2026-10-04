@@ -246,13 +246,13 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
-		"TEMP_75B791AF-D75C-4DB2-A1A8-DD49EFE8F29F" /* seismoscope-asr-seismoscope */ = {
+		"TEMP_75B791AF-D75C-4DB2-A1A8-DD49EFE8F29F" /* Seismoscope */ = {
 			isa = PBXGroup;
 			children = (
 				"TEMP_6954C10C-2F0D-4767-B6D2-DA17278429D2" /* Signing.Debug.xcconfig */,
 				"TEMP_591DF937-E1C8-40B5-8D4F-78D7DFE20331" /* Signing.Release.xcconfig */,
 			);
-			path = "seismoscope-asr-seismoscope";
+			path = Seismoscope;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

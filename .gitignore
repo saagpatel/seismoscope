@@ -19,6 +19,7 @@ build/
 *.bak
 
 # Local signing config — contains Team ID and provisioning profile names
+ExportOptions.plist
 fastlane/.env
 Signing.local.xcconfig
 

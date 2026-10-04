@@ -41,8 +41,9 @@ cp Signing.local.xcconfig.example Signing.local.xcconfig
 ```
 `Signing.xcconfig` (committed) holds non-secret defaults and optionally includes your local file; the project reads both via XcodeGen `configFiles`.
 
-`distkit.ios.config.sh` and `ExportOptions.plist` hold the distribution lane's
-public configuration, including its team ID. The lane requests manual signing
+`distkit.ios.config.sh` holds the distribution lane's configuration. Its export
+options stay local like the other signing files: copy
+`ExportOptions.plist.example` to `ExportOptions.plist` and set your Team ID. The lane requests manual signing
 with the `Seismoscope App Store` profile; the export plist preserves the sibling
 lane's automatic export setting. See `APP-STORE-READINESS.md` for checks and
 operator prerequisites before signing or uploading.
